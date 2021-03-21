@@ -1,0 +1,7 @@
+SOURCE_URL=https://downloads.apache.org/guacamole/1.3.0/binary/guacamole-auth-header-1.2.0.tar.gz
+SOURCE_SUM=0b8a5e9aae2a24ee48953a12093a0dd6c0b5185d9bfb0851087ca0bb46306b38
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=tar.gz
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=guacamole-auth-header-1.2.0.tar.gz
+SOURCE_EXTRACT=true

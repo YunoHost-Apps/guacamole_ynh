@@ -1,18 +1,17 @@
 {
-    "name": "YunoHost example app",
-    "id": "ynhexample",
+    "name": "Apache Guacamole",
+    "id": "guacamole",
     "packaging_format": 1,
     "description": {
-        "en": "Explain in *a few (10~15) words* the purpose of the app or what it actually does (it is meant to give a rough idea to users browsing a catalog of 100+ apps)",
-        "fr": "Expliquez en *quelques* (10~15) mots l'utilité de l'app ou ce qu'elle fait (l'objectif est de donner une idée grossière pour des utilisateurs qui naviguent dans un catalogue de 100+ apps)"
+        "en": "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH.",
+        "fr": "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH."
     },
-    "version": "1.0~ynh1",
+    "version": "1.3.0~ynh1",
     "url": "https://example.com",
-    "license": "free",
+    "license": "Apache-2.0",
     "maintainer": {
-        "name": "John doe",
-        "email": "john.doe@example.com",
-        "url": "http://example.com"
+        "name": "Jules Bertholet",
+        "email": "jules.bertholet@gmail.com"
     },
     "requirements": {
         "yunohost": ">= 4.1.3"
@@ -20,7 +19,6 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.3-fpm",
         "mysql"
     ],
     "arguments": {
@@ -33,8 +31,12 @@
             {
                 "name": "path",
                 "type": "path",
-                "example": "/example",
-                "default": "/example"
+                "ask": {
+                    "en": "Choose a path for Guacamole",
+                    "fr": "Choisissez un chemin pour Guacamole"
+                },
+                "example": "/guacamole",
+                "default": "/guacamole"
             },
             {
                 "name": "admin",
@@ -44,26 +46,11 @@
             {
                 "name": "is_public",
                 "type": "boolean",
-                "default": true
-            },
-            {
-                "name": "language",
-                "type": "string",
-                "ask": {
-                    "en": "Choose the application language",
-                    "fr": "Choisissez la langue de l'application"
-                },
-                "choices": ["fr", "en"],
-                "default": "fr"
-            },
-            {
-                "name": "password",
-                "type": "password",
+                "default": false,
                 "help": {
-                    "en": "Use the help field to add an information for the admin about this question.",
-                    "fr": "Utilisez le champ aide pour ajouter une information à l'intention de l'administrateur à propos de cette question."
-                },
-                "example": "Choose a password"
+                    "en": "Not recommended",
+                    "fr": "Pas reccomandé"
+                }
             }
         ]
     }

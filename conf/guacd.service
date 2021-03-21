@@ -1,0 +1,15 @@
+[Unit]
+Description=Guacamole Server
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__-guacd
+Group=__APP__-guacd
+ExecStart=__FINALPATH__/sbin/guacd -f -l __GUACD_PORT__ >> /var/log/__APP__/guacd.log 2>&1
+Restart=on-abnormal
+Environment="LD_LIBRARY_PATH=__FINALPATH__/lib:__FINALPATH__/usr/lib"
+Environment="GUACAMOLE_HOME=__FINALPATH__/etc/guacamole"
+
+[Install]
+WantedBy=multi-user.target

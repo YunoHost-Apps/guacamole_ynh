@@ -1,0 +1,7 @@
+SOURCE_URL=https://downloads.apache.org/guacamole/1.3.0/source/guacamole-server-1.3.0.tar.gz
+SOURCE_SUM=bc5511c7170841f90d437b5a07b7ec2f5bfd061f2a5bfc4e4d0fc4d7b303fb4c
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=tar.gz
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=guacamole-server-1.3.0.tar.gz
+SOURCE_EXTRACT=true

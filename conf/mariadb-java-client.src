@@ -1,0 +1,7 @@
+SOURCE_URL=https://downloads.mariadb.com/Connectors/java/connector-java-2.7.2/mariadb-java-client-2.7.2.jar
+SOURCE_SUM=a3f6776df0842cf65e7f158515012d5307da949f66042282e1ee4474dd19f448
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=tar.gz
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=mariadb-java-client-2.7.2.jar
+SOURCE_EXTRACT=false
