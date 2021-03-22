@@ -39,8 +39,8 @@ L'utilisateur choisi come admin durant le processus d'installation aura accès a
 ## Liens
 
  * Signaler un bug : https://github.com/YunoHost-Apps/guacamole_ynh/issues
- * Site de l'application : Lien vers le site officiel de cette application.
- * Dépôt de l'application principale : Lien vers le dépôt officiel de l'application principale.
+ * Site de l'application : https://guacamole.apache.org//
+ * Dépôt de l'application principale : https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults
  * Site web YunoHost : https://yunohost.org/
 
 ---

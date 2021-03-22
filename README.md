@@ -37,8 +37,8 @@ Can the app be used by multiple users? **Yes**
 ## Links
 
  * Report a bug: https://github.com/YunoHost-Apps/guacamole_ynh/issues
- * App website: Link to the official website of this app.
- * Upstream app repository: Link to the official repository of the upstream app.
+ * App website: https://guacamole.apache.org/
+ * Upstream app repository: https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults
  * YunoHost website: https://yunohost.org/
 
 ---
