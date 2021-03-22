@@ -9,7 +9,7 @@
 Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
 
 ## Vue d'ensemble
-Apache Guacamole est un service de bureau à distance sans client. Vous pouvez l'ulitiser pour accéder à votre serveur, ou d'autres machines, via des protocoles comme VNC, RDP, SSH, et SFTP. Apache Guacamole fonctionne avec plusierus utilisateurs, et vous pouvez choisir quels utilisateurs peuvent accéder à quelles connections.
+Apache Guacamole est un service de bureau à distance sans client. Vous pouvez l'ulitiser pour accéder à votre serveur, ou d'autres machines, via des protocoles comme VNC, RDP, SSH, et SFTP. Apache Guacamole fonctionne avec plusieurs utilisateurs, et vous pouvez choisir quels utilisateurs peuvent accéder à quelles connections.
 
 **Version incluse :** 1.3.0
 
@@ -19,7 +19,7 @@ Apache Guacamole est un service de bureau à distance sans client. Vous pouvez l
 
 ## Configuration
 
-L'utilisateur choisi come admin durant le processus d'installation aura accès au paramétres d'administration dans le menu de configuration de l'application (sous le menu utilisateur). Le ficiers de configuration sont dans `/opt/yunohost/guacamole/etc/guacamole` (pour la première installation).
+L'utilisateur choisi comme admin durant le processus d'installation aura accès au paramétres d'administration dans le menu de configuration de l'application (sous le menu utilisateur). Le fichiers de configuration sont dans `/opt/yunohost/guacamole/etc/guacamole` (pour la première installation).
 
 ## Documentation
 
