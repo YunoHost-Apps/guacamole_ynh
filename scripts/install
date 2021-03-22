@@ -291,11 +291,15 @@ ynh_replace_string --match_string="8080" --replace_string="$port" --target_file=
 ### that really need such authorization.
 
 # Set permissions  to app files
-chown -R root: $final_path
-chown -R "$app-tomcat":"$app-guacd" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
-chown -R root:"$app-tomcat" "$final_path/etc/tomcat9/" "$final_path/etc/guacamole/"
-chmod -R 650 "$final_path/etc/guacamole/"
+chown -R root:root $final_path
+chmod -R o-rwx $final_path
+setfacl -n -R -m user:$app-guacd:rx -m default:user:$app-guacd:rx $final_path
+setfacl -n -R -m user:$app-tomcat:rx -m default:user:$app-tomcat:rx $final_path
+chown -R $app-guacd:$app-guacd "/var/log/$app/guacd/"
+chown -R $app-tomcat:$app-tomcat "/var/log/$app/tomcat/"
+chown -R root:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamole/"
 chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
+setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
 
 #=================================================
 # SETUP LOGROTATE
