@@ -234,7 +234,7 @@ setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var
 ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
 
 # Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/tomcat/catalina.out" --specific_user="$app-tomcat/$app-tomcat" --non-append
+ynh_use_logrotate --logfile="/var/log/$app/tomcat/catalina.out" --non-append --specific_user="$app-tomcat/$app-tomcat"
 
 #=================================================
 # INTEGRATE SERVICES IN YUNOHOST
