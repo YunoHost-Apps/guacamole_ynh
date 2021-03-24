@@ -173,9 +173,9 @@ popd || ynh_die
 #=================================================
 
 mkdir -p "$final_path/etc/"
-ln -s "$final_path/etc/tomcat9" "$final_path/var/lib/tomcat9/conf"
-ln -s "/var/log/$app/tomcat/" "$final_path/var/lib/tomcat9/logs"
-ln -s "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
+ln -s -f "$final_path/etc/tomcat9" "$final_path/var/lib/tomcat9/conf"
+ln -s -f "/var/log/$app/tomcat/" "$final_path/var/lib/tomcat9/logs"
+ln -s -f "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
 
 #=================================================
 # CREATE LOG DIRS
