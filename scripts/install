@@ -68,7 +68,7 @@ ynh_app_setting_set --app=$app --key=port --value=$port
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=1
 
-# Guacamole depends on Apache Tomcat. 
+# Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
 # So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
 
@@ -136,13 +136,13 @@ mv "$final_path/etc/guacamole/lib/mariadb-java-client-2.7.2.jar" "$final_path/et
 
 ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$final_path/"
 pushd "$final_path" || ynh_die
-	ar x "$final_path/tomcat9_9.0.31-1~deb10u3_all.deb" "data.tar.xz"
+	ar x "$final_path/tomcat9.deb" "data.tar.xz"
 popd || ynh_die
-ynh_secure_remove --file="$final_path/tomcat9_9.0.31-1~deb10u3_all.deb"
+ynh_secure_remove --file="$final_path/tomcat9.deb"
 mkdir -p "$final_path/tomcat9-data"
 tar -C "$final_path/tomcat9-data" -xJf "$final_path/data.tar.xz"
 cp -r "$final_path/tomcat9-data/usr/share/tomcat9/etc" -T "$final_path/etc/tomcat9/"
-cp -r "$final_path/tomcat9-data/etc/tomcat9/" -T "$final_path/etc/tomcat9/" 
+cp -r "$final_path/tomcat9-data/etc/tomcat9/" -T "$final_path/etc/tomcat9/"
 ynh_secure_remove --file="$final_path/data.tar.xz"
 ynh_secure_remove --file="$final_path/tomcat9-data"
 
@@ -184,8 +184,8 @@ ynh_script_progression --message="Compiling guacd..." --weight=30
 
 pushd "$final_path/.guacd-src" || ynh_die
 	./configure --enable-allow-freerdp-snapshots --prefix="$final_path" --datadir="$final_path" --with-freerdp-plugin-dir="$final_path/lib/x86_64-linux-gnu/freerdp2"
-	make
-	make install
+	ynh_exec_warn_less make
+	ynh_exec_warn_less make install
 popd || ynh_die
 
 #=================================================
