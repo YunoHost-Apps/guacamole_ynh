@@ -93,6 +93,15 @@ if [ ! $tomcat_active ]; then
 fi
 
 #=================================================
+# CREATE DEDICATED USERS
+#=================================================
+ynh_script_progression --message="Configuring system users..." --weight=1
+
+# Create system users
+ynh_system_user_create --username="$app-guacd"
+ynh_system_user_create --username="$app-tomcat"
+
+#=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Creating a MySQL database..." --weight=1
@@ -167,15 +176,6 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 ynh_add_nginx_config
 
 #=================================================
-# CREATE DEDICATED USERS
-#=================================================
-ynh_script_progression --message="Configuring system users..." --weight=1
-
-# Create system users
-ynh_system_user_create --username="$app-guacd"
-ynh_system_user_create --username="$app-tomcat"
-
-#=================================================
 # SPECIFIC SETUP
 #=================================================
 # COMPILE GUACD
@@ -203,21 +203,21 @@ ln -s -f "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring systemd services..." --weight=1
-
-# Create dedicated systemd configs
-ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"  -v guacd_port
-ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
-
-#=================================================
 # ADD CONFIGURATIONS
 #=================================================
 
 ynh_add_config --template="guacamole.properties" --destination="$final_path/etc/guacamole/guacamole.properties"
 
 ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$final_path/etc/tomcat9/server.xml"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Configuring systemd services..." --weight=1
+
+# Create dedicated systemd configs
+ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
+ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
 
 #=================================================
 # GENERIC FINALIZATION
