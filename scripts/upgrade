@@ -26,10 +26,10 @@ db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 
-
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -58,10 +58,20 @@ ynh_systemd_action --service_name="$app-guacd" --action="stop" --log_path="/var/
 ynh_systemd_action --service_name="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
 
 #=================================================
+# CREATE DEDICATED USERS
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+
+# Create dedicated users (if not existing)
+ynh_system_user_create --username="$app-guacd"
+ynh_system_user_create --username="$app-tomcat"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]; then
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
 	ynh_script_progression --message="Upgrading source files..." --weight=1
 
 	# Download, check integrity, uncompress and patch the source from app.src
@@ -141,15 +151,6 @@ if [ ! $tomcat_active ]; then
 fi
 
 #=================================================
-# CREATE DEDICATED USERS
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create dedicated users (if not existing)
-ynh_system_user_create --username="$app-guacd"
-ynh_system_user_create --username="$app-tomcat"
-
-#=================================================
 # SPECIFIC UPGRADE
 #=================================================
 # COMPILE GUACD
@@ -177,21 +178,21 @@ ln -s -f "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
-
-# Create dedicated systemd configs
-ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"  -v guacd_port
-ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
-
-#=================================================
 # UPDATE CONFIG FILES
 #=================================================
 
 ynh_add_config --template="guacamole.properties" --destination="$final_path/etc/guacamole/guacamole.properties"
 
 ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$final_path/etc/tomcat9/server.xml"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
+
+# Create dedicated systemd configs
+ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
+ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
 
 #=================================================
 # GENERIC FINALIZATION
