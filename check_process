@@ -1,14 +1,9 @@
-# See here for more information
-# https://github.com/YunoHost/package_check#syntax-check_process-file
-
-# Move this file from check_process.default to check_process when you have filled it.
-
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		path="/path"	(PATH)
-		admin="john"	(USER)
-		is_public=0	(PUBLIC|public=1|private=0)
+		domain="domain.tld"
+		path="/path"
+		admin="john"
+		is_public=0
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=1
@@ -17,7 +12,6 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		upgrade=0	from_commit=CommitHash
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
@@ -29,4 +23,3 @@ Notification=none
 	; commit=CommitHash
 		name=Name and date of the commit.
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&is_public=1&
-
