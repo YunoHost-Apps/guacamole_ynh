@@ -110,11 +110,11 @@ fi
 #=================================================
 
 # Restore permissions on app files
-chown -R root:root $final_path
+chown -R nobody:nobody $final_path
 chmod -R o-rwx $final_path
 setfacl -n -R -m user:$app-guacd:rx -m default:user:$app-guacd:rx $final_path
 setfacl -n -R -m user:$app-tomcat:rx -m default:user:$app-tomcat:rx $final_path
-chown -R root:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamole/"
+chown -R nobody:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamole/"
 chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
 setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
 
