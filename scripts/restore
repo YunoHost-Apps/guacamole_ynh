@@ -108,7 +108,7 @@ fi
 #=================================================
 
 # Restore permissions on app files
-chown -R nobody:nobody $final_path
+chown -R nobody $final_path
 chmod -R o-rwx $final_path
 setfacl -n -R -m user:$app-guacd:rx -m default:user:$app-guacd:rx $final_path
 setfacl -n -R -m user:$app-tomcat:rx -m default:user:$app-tomcat:rx $final_path
