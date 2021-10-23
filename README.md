@@ -29,11 +29,6 @@ The user that is configured as admin during install will have access to admin se
 Are LDAP and HTTP auth supported? **Yes**
 Can the app be used by multiple users? **Yes**
 
-#### Supported architectures
-
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/guacamole%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/guacamole%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/guacamole/)
-
 ## Links
 
  * Report a bug: https://github.com/YunoHost-Apps/guacamole_ynh/issues
