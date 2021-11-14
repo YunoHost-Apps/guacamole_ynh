@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH.
 
-**Version incluse :** 1.3.0~ynh5
+**Version incluse :** 1.3.0~ynh6
 
 
 
