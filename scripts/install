@@ -118,42 +118,7 @@ ynh_script_progression --message="Setting up source files..." --weight=3
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --source_id="server" --dest_dir="$final_path/.guacd-src"
-
-tomcat_guac_dir="$path_url"
-if [ "$path_url" == "/" -o -z "$path_url" ]; then
-	tomcat_guac_dir="ROOT"
-fi
-
-ynh_setup_source --source_id="client" --dest_dir="$final_path/var/lib/tomcat9/webapps/$tomcat_guac_dir"
-
-ynh_setup_source --source_id="auth-ldap" --dest_dir="$final_path/etc/guacamole/extensions/ldap"
-mv "$final_path/etc/guacamole/extensions/ldap/guacamole-auth-ldap-1.3.0.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-ldap.jar"
-ynh_secure_remove --file="$final_path/etc/guacamole/extensions/ldap"
-
-ynh_setup_source --source_id="auth-header" --dest_dir="$final_path/etc/guacamole/extensions/header"
-mv "$final_path/etc/guacamole/extensions/header/guacamole-auth-header-1.2.0.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-header.jar"
-ynh_secure_remove --file="$final_path/etc/guacamole/extensions/header"
-
-ynh_setup_source --source_id="auth-jdbc" --dest_dir="$final_path/etc/guacamole/extensions/jdbc"
-mv "$final_path/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-1.3.0.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
-mv "$final_path/etc/guacamole/extensions/jdbc/mysql/schema" "$final_path/etc/guacamole/extensions/mysql-schema"
-ynh_secure_remove --file="$final_path/etc/guacamole/extensions/jdbc"
-
-ynh_setup_source --source_id="mariadb-java-client" --dest_dir="$final_path/etc/guacamole/lib/"
-mv "$final_path/etc/guacamole/lib/mariadb-java-client-2.7.2.jar" "$final_path/etc/guacamole/lib/mariadb-java-client.jar"
-
-ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$final_path/"
-pushd "$final_path" || ynh_die
-	ar x "$final_path/tomcat9.deb" "data.tar.xz"
-popd || ynh_die
-ynh_secure_remove --file="$final_path/tomcat9.deb"
-mkdir -p "$final_path/tomcat9-data"
-tar -C "$final_path/tomcat9-data" -xJf "$final_path/data.tar.xz"
-cp -r "$final_path/tomcat9-data/usr/share/tomcat9/etc" -T "$final_path/etc/tomcat9/"
-cp -r "$final_path/tomcat9-data/etc/tomcat9/" -T "$final_path/etc/tomcat9/"
-ynh_secure_remove --file="$final_path/data.tar.xz"
-ynh_secure_remove --file="$final_path/tomcat9-data"
+setup_sources
 
 #=================================================
 # FINISH SETTING UP DATABASE
