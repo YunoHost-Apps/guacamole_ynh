@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH.
 
-**Shipped version:** 1.3.0~ynh6
+**Shipped version:** 1.4.0~ynh1
 
 
 

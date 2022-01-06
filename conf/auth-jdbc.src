@@ -1,7 +1,7 @@
-SOURCE_URL=https://downloads.apache.org/guacamole/1.3.0/binary/guacamole-auth-jdbc-1.3.0.tar.gz
-SOURCE_SUM=81665a04fdfa9b07b088440da90546b5ff409018de492d061cb6b6a2f82cc675
+SOURCE_URL=https://downloads.apache.org/guacamole/1.4.0/binary/guacamole-auth-jdbc-1.4.0.tar.gz
+SOURCE_SUM=47f4f121cad74ab64d5baf3d14e8f709677a26b3058005a977277a07716d4d9c
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=guacamole-auth-jdbc-1.3.0.tar.gz
+SOURCE_FILENAME=guacamole-auth-jdbc.tar.gz
 SOURCE_EXTRACT=true
