@@ -44,13 +44,6 @@ test ! -d $final_path \
 #=================================================
 # STANDARD RESTORATION STEPS
 #=================================================
-# RESTORE THE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the NGINX web server configuration..."
-
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
-
-#=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
@@ -71,8 +64,8 @@ ynh_restore_file --origin_path="$final_path"
 #=================================================
 ynh_script_progression --message="Restoring the Fail2Ban configuration..." --weight=1
 
-ynh_restore_file "/etc/fail2ban/jail.d/$app.conf"
-ynh_restore_file "/etc/fail2ban/filter.d/$app.conf"
+ynh_restore_file --origin_path="/etc/fail2ban/jail.d/$app.conf"
+ynh_restore_file --origin_path="/etc/fail2ban/filter.d/$app.conf"
 ynh_systemd_action --action=restart --service_name=fail2ban
 
 #=================================================
@@ -117,6 +110,13 @@ chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
 setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
 
 #=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the NGINX web server configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Restoring the MySQL database..." --weight=1
@@ -128,7 +128,7 @@ ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./
 #=================================================
 # RESTORE VARIOUS FILES
 #=================================================
-ynh_script_progression --message="Restoring various files..."
+ynh_script_progression --message="Restoring various files..." --weight=1
 
 ynh_restore_file --origin_path="/var/log/$app"
 chown -R $app-guacd:$app-guacd "/var/log/$app/guacd/"
@@ -145,6 +145,13 @@ systemctl enable "$app-guacd.service" --quiet
 systemctl enable "$app-tomcat.service" --quiet
 
 #=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the logrotate configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/logrotate.d/$app"
+
+#=================================================
 # INTEGRATE SERVICES IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating services in YunoHost..." --weight=1
@@ -159,13 +166,6 @@ ynh_script_progression --message="Starting systemd services..." --weight=1
 
 ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
 ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
-
-#=================================================
-# RESTORE THE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the logrotate configuration..."
-
-ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION

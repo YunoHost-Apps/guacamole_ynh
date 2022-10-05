@@ -1,0 +1,1 @@
+Apache Guacamole is a clientless remote desktop gateway. You can use it to access your server, or other machines, via protocols like VNC, RDP, SSH, and SFTP. It supports multiple users, and you can configure which useres are allowed to access what connections.

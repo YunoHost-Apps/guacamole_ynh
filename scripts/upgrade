@@ -29,7 +29,7 @@ db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
+ynh_script_progression --message="Checking version..." --weight=1
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -79,14 +79,6 @@ then
 fi
 
 #=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
-
-#=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..." --weight=1
@@ -116,6 +108,14 @@ if [ ! $tomcat_active ]; then
 fi
 
 #=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+#=================================================
 # SPECIFIC UPGRADE
 #=================================================
 # COMPILE GUACD
@@ -131,6 +131,7 @@ popd || ynh_die
 #=================================================
 # SETUP TOMCAT
 #=================================================
+ynh_script_progression --message="Setuping Tomcat..." --weight=30
 
 mkdir -p "$final_path/etc/"
 ln -s -f "$final_path/etc/tomcat9" "$final_path/var/lib/tomcat9/conf"
@@ -140,11 +141,13 @@ ln -s -f "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
 #=================================================
 # CREATE LOG DIRS
 #=================================================
+
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
-# UPDATE CONFIG FILES
+# UPDATE A CONFIG FILE
 #=================================================
+ynh_script_progression --message="Updating a configuration file..." --weight=1
 
 ynh_add_config --template="guacamole.properties" --destination="$final_path/etc/guacamole/guacamole.properties"
 
@@ -160,8 +163,6 @@ ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
 ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
@@ -176,6 +177,8 @@ chown -R nobody:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamol
 chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
 setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
 
+#=================================================
+# GENERIC FINALIZATION
 #=================================================
 # SETUP LOGROTATE
 #=================================================

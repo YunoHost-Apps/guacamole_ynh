@@ -28,7 +28,7 @@
         "mysql"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
@@ -40,10 +40,6 @@
                 "default": "/guacamole"
             },
             {
-                "name": "admin",
-                "type": "user"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": false,
@@ -51,6 +47,10 @@
                     "en": "Not recommended",
                     "fr": "Pas reccomandé"
                 }
+            },
+            {
+                "name": "admin",
+                "type": "user"
             }
         ]
     }

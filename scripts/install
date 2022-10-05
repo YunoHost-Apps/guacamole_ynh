@@ -25,8 +25,8 @@ ynh_abort_if_errors
 
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
-admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+admin=$YNH_APP_ARG_ADMIN
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -156,6 +156,7 @@ popd || ynh_die
 #=================================================
 # SETUP TOMCAT
 #=================================================
+ynh_script_progression --message="Setuping Tomcat..." --weight=30
 
 mkdir -p "$final_path/etc/"
 ln -s -f "$final_path/etc/tomcat9" "$final_path/var/lib/tomcat9/conf"
@@ -165,11 +166,13 @@ ln -s -f "/var/cache/$app-tomcat9" "$final_path/var/lib/tomcat9/work"
 #=================================================
 # CREATE LOG DIRS
 #=================================================
+
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
-# ADD CONFIGURATIONS
+# ADD A CONFIGURATION
 #=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=1
 
 ynh_add_config --template="guacamole.properties" --destination="$final_path/etc/guacamole/guacamole.properties"
 
@@ -185,8 +188,6 @@ ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
 ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
@@ -201,6 +202,8 @@ chown -R nobody:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamol
 chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
 setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
 
+#=================================================
+# GENERIC FINALIZATION
 #=================================================
 # SETUP LOGROTATE
 #=================================================

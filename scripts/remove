@@ -31,10 +31,12 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 # Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
 ynh_script_progression --message="Removing $app service integration..." --weight=1
 
-if ynh_exec_warn_less yunohost service status $app-guacd >/dev/null; then
+if ynh_exec_warn_less yunohost service status $app-guacd >/dev/null
+then
 	yunohost service remove "$app-guacd"
 fi
-if ynh_exec_warn_less yunohost service status $app-tomcat >/dev/null; then
+if ynh_exec_warn_less yunohost service status $app-tomcat >/dev/null
+then
 	yunohost service remove "$app-tomcat"
 fi
 
@@ -48,20 +50,20 @@ ynh_remove_systemd_config --service="$app-guacd"
 ynh_remove_systemd_config --service="$app-tomcat"
 
 #=================================================
+# REMOVE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing logrotate configuration..." --weight=1
+
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
+
+#=================================================
 # REMOVE THE MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Removing the MySQL database..." --weight=1
 
 # Remove a database if it exists, along with the associated user
 ynh_mysql_remove_db --db_user=$db_user --db_name=$db_name
-
-#=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=1
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
 
 #=================================================
 # REMOVE APP MAIN DIR
@@ -80,12 +82,12 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE LOGROTATE CONFIGURATION
+# REMOVE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Removing logrotate configuration..." --weight=1
+ynh_script_progression --message="Removing dependencies..." --weight=1
 
-# Remove the app-specific logrotate config
-ynh_remove_logrotate
+# Remove metapackage and its dependencies
+ynh_remove_app_dependencies
 
 #=================================================
 # REMOVE FAIL2BAN CONFIGURATION
