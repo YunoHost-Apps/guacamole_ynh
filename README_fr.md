@@ -15,7 +15,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH.
+Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH
 
 **Version incluse :** 1.4.0~ynh1
 
