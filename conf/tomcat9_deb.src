@@ -1,5 +1,5 @@
-SOURCE_URL=http://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.43-2~deb11u3_all.deb
-SOURCE_SUM=c49eaa7de72f8d90f30a8fd9a8ba8e2e4ba51988ce839bb31a4a151758d47206
+SOURCE_URL=http://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.43-2~deb11u5_all.deb
+SOURCE_SUM=af9dca54e7c9cecd97513df93a43652d00dd47ec01d939dab8f8b3a6749f83bc
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=ar
 SOURCE_IN_SUBDIR=false
