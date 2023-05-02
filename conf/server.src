@@ -1,5 +1,5 @@
-SOURCE_URL=https://downloads.apache.org/guacamole/1.4.0/source/guacamole-server-1.4.0.tar.gz
-SOURCE_SUM=2789075c8b25e5aa42dec505491d3425b7b2fe2051772b0006860c26e8a57b90
+SOURCE_URL=https://downloads.apache.org/guacamole/1.5.1/source/guacamole-server-1.5.1.tar.gz
+SOURCE_SUM=aabd707a68b99253f87234d0c3884678d6d6c1bceb39e7f9943c69d5329f4501
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
