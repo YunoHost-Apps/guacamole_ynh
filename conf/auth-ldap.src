@@ -1,5 +1,5 @@
-SOURCE_URL=https://downloads.apache.org/guacamole/1.4.0/binary/guacamole-auth-ldap-1.4.0.tar.gz
-SOURCE_SUM=f28488717b26168a5396e125ec7fbff1b7268a658c6100f6ad1bbfbd18a17779
+SOURCE_URL=https://downloads.apache.org/guacamole/1.5.1/binary/guacamole-auth-ldap-1.5.1.tar.gz
+SOURCE_SUM=4d32bb2aab09f9f99d02faa3db82c7c9ff3e5f84de9b042fba3a5f745f2704e8
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
