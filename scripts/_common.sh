@@ -12,7 +12,7 @@ pkg_dependencies="acl build-essential libcairo2 libjpeg62-turbo-dev libpng-dev l
 #=================================================
 
 function setup_sources {
-	guacamole_verson="1.4.0"
+	guacamole_verson="1.5.1"
 
 	ynh_setup_source --source_id="server" --dest_dir="$final_path/.guacd-src"
 
