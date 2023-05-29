@@ -26,7 +26,7 @@ function setup_sources {
 
 	ynh_setup_source --source_id="auth-header" --dest_dir="$install_dir/etc/guacamole/extensions/header"
 	mv "$install_dir/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_verson.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-header.jar"
-#REMOVEME? 	ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/header"
+	ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/header"
 
 	ynh_setup_source --source_id="auth-jdbc" --dest_dir="$install_dir/etc/guacamole/extensions/jdbc"
 	mv "$install_dir/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_verson.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
