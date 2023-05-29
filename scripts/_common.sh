@@ -12,7 +12,7 @@ pkg_dependencies="acl build-essential libcairo2 libjpeg62-turbo-dev libpng-dev l
 #=================================================
 
 function setup_sources {
-	guacamole_verson="1.4.0"
+	guacamole_version="1.5.2"
 
 	ynh_setup_source --source_id="server" --dest_dir="$final_path/.guacd-src"
 
@@ -24,15 +24,15 @@ function setup_sources {
 	ynh_setup_source --source_id="client" --dest_dir="$final_path/var/lib/tomcat9/webapps/$tomcat_guac_dir"
 
 	ynh_setup_source --source_id="auth-ldap" --dest_dir="$final_path/etc/guacamole/extensions/ldap"
-	mv "$final_path/etc/guacamole/extensions/ldap/guacamole-auth-ldap-$guacamole_verson.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-ldap.jar"
+	mv "$final_path/etc/guacamole/extensions/ldap/guacamole-auth-ldap-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-ldap.jar"
 	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/ldap"
 
 	ynh_setup_source --source_id="auth-header" --dest_dir="$final_path/etc/guacamole/extensions/header"
-	mv "$final_path/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_verson.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-header.jar"
+	mv "$final_path/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-header.jar"
 	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/header"
 
 	ynh_setup_source --source_id="auth-jdbc" --dest_dir="$final_path/etc/guacamole/extensions/jdbc"
-	mv "$final_path/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_verson.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
+	mv "$final_path/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
 	mv "$final_path/etc/guacamole/extensions/jdbc/mysql/schema" "$final_path/etc/guacamole/extensions/mysql-schema"
 	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/jdbc"
 

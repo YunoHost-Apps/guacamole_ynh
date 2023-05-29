@@ -1,5 +1,5 @@
-SOURCE_URL=https://downloads.apache.org/guacamole/1.4.0/binary/guacamole-auth-jdbc-1.4.0.tar.gz
-SOURCE_SUM=47f4f121cad74ab64d5baf3d14e8f709677a26b3058005a977277a07716d4d9c
+SOURCE_URL=https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-jdbc-1.5.2.tar.gz
+SOURCE_SUM=0c050fcf9e062eadb242f2962217870919cd02a119bc3e71d77efdd4b7f88e06
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true

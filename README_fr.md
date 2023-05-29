@@ -5,23 +5,24 @@ It shall NOT be edited by hand.
 
 # Guacamole pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/guacamole.svg)](https://dash.yunohost.org/appci/app/guacamole) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/guacamole.svg)](https://dash.yunohost.org/appci/app/guacamole) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+
 [![Installer Guacamole avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Guacamole rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Guacamole rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
-Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH.
+Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH
 
-**Version incluse :** 1.4.0~ynh1
+**Version incluse :** 1.5.2~ynh1
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Guacamole](./doc/screenshots/screenshot1.jpg)
+![Capture d’écran de Guacamole](./doc/screenshots/screenshot1.jpg)
 
 ## Avertissements / informations importantes
 
@@ -31,9 +32,9 @@ L'utilisateur choisi comme admin durant le processus d'installation aura accès 
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://guacamole.apache.org/>
-* Documentation officielle de l'admin : <https://guacamole.apache.org/doc/gug/>
-* Dépôt de code officiel de l'app : <https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults>
+* Site officiel de l’app : <https://guacamole.apache.org/>
+* Documentation officielle de l’admin : <https://guacamole.apache.org/doc/gug/>
+* Dépôt de code officiel de l’app : <https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_guacamole>
 * Signaler un bug : <https://github.com/YunoHost-Apps/guacamole_ynh/issues>
 
@@ -49,4 +50,4 @@ ou
 sudo yunohost app upgrade guacamole -u https://github.com/YunoHost-Apps/guacamole_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
