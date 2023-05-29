@@ -53,8 +53,8 @@ ram.runtime = "50M"
         sha256 = "f06577b19e89b33028b96cd4f031248e761de7ebc712f4ef535e268df76edb2a"
 
         [resources.sources.auth-ldap]
-        url = "https://downloads.apache.org/guacamole/1.5.1/binary/guacamole-auth-ldap-1.5.1.tar.gz"
-        sha256 = "4d32bb2aab09f9f99d02faa3db82c7c9ff3e5f84de9b042fba3a5f745f2704e8"
+        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-ldap-1.5.2.tar.gz"
+        sha256 = "49420bbe6f12f56a6ad8b31139512f289faada004074709b6a3a8e1475e9bd23"
 
         [resources.sources.client]
         url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-1.5.2.war"
@@ -63,7 +63,7 @@ ram.runtime = "50M"
 
         [resources.sources.server]
         url = "https://downloads.apache.org/guacamole/1.5.1/source/guacamole-server-1.5.1.tar.gz"
-        sha256 = "aabd707a68b99253f87234d0c3884678d6d6c1bceb39e7f9943c69d5329f4501"
+        sha256 = "a8d4813feaeb1e6f35fbfd2cf57cb0429db2225960cbfed36252f65ac93dffc4"
 
         [resources.sources.tomcat9_deb]
         url = "https://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.70-1_all.deb"
@@ -72,8 +72,8 @@ ram.runtime = "50M"
         rename = "tomcat9.deb"
 
         [resources.sources.auth-jdbc]
-        url = "https://downloads.apache.org/guacamole/1.5.1/binary/guacamole-auth-jdbc-1.5.1.tar.gz"
-        sha256 = "daf293856ddc2664b862a53b3f232ece82925832c081238161f27c49081b4305"
+        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-jdbc-1.5.2.tar.gz"
+        sha256 = "0c050fcf9e062eadb242f2962217870919cd02a119bc3e71d77efdd4b7f88e06"
 
     [resources.ports]
     main.default = 8080
