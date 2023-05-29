@@ -10,63 +10,9 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-#REMOVEME? ynh_clean_setup () {
-	true
-}
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-#REMOVEME? domain=$YNH_APP_ARG_DOMAIN
-#REMOVEME? path=$YNH_APP_ARG_PATH
-#REMOVEME? admin=$YNH_APP_ARG_ADMIN
-#REMOVEME? is_public=$YNH_APP_ARG_IS_PUBLIC
-
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-#REMOVEME? ynh_script_progression --message="Validating installation parameters..." --weight=1
-
-#REMOVEME? install_dir=/opt/yunohost/$app
-#REMOVEME? test ! -e "$install_dir" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-#REMOVEME? ynh_webpath_register --app=$app --domain=$domain --path=$path
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-#REMOVEME? ynh_script_progression --message="Storing installation settings..." --weight=1
-
-#REMOVEME? ynh_app_setting_set --app=$app --key=domain --value=$domain
-#REMOVEME? ynh_app_setting_set --app=$app --key=path --value=$path
-#REMOVEME? ynh_app_setting_set --app=$app --key=admin --value=$admin
-
-#=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN A PORT
-#=================================================
-ynh_script_progression --message="Finding available ports..." --weight=1
-
-# Find available ports
-#REMOVEME? guacd_port=$(ynh_find_port --port=4822)
-#REMOVEME? ynh_app_setting_set --app=$app --key=guacd_port --value=$guacd_port
-#REMOVEME? port=$(ynh_find_port --port=8080)
-#REMOVEME? ynh_app_setting_set --app=$app --key=port --value=$port
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Installing dependencies..." --weight=1
+ynh_script_progression --message="Installing dependencies..." --weight=1
 
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
@@ -95,28 +41,17 @@ fi
 #=================================================
 # CREATE DEDICATED USERS
 #=================================================
-#REMOVEME? ynh_script_progression --message="Configuring system users..." --weight=1
+ynh_script_progression --message="Configuring system users..." --weight=1
 
 # Create system users
-#REMOVEME? ynh_system_user_create --username="$app-guacd"
-#REMOVEME? ynh_system_user_create --username="$app-tomcat"
-
-#=================================================
-# CREATE A MYSQL DATABASE
-#=================================================
-#REMOVEME? ynh_script_progression --message="Creating a MySQL database..." --weight=1
-
-#REMOVEME? db_name=$(ynh_sanitize_dbid --db_name=$app)
-#REMOVEME? db_user=$db_name
-#REMOVEME? ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-#REMOVEME? ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
+ynh_system_user_create --username="$app-guacd"
+ynh_system_user_create --username="$app-tomcat"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCES
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=3
 
-#REMOVEME? ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 # Download, check integrity, uncompress and patch the source from app.src
 setup_sources
 
@@ -130,7 +65,7 @@ ynh_replace_string --match_string="guacadmin" --replace_string="$admin" -f "$ins
 ynh_replace_string --match_string="CA458A7D494E3BE824F5E1E175A1556C0F8EEF2C2D7DF3633BEC4A29C4411960" --replace_string="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
 ynh_replace_string --match_string="FE24ADC5E11E2B25288D1704ABE67A79E342ECC26064CE69C5B3177795A82264" --replace_string="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
 ynh_mysql_connect_as --user=$db_user --password="$db_pwd" --database="$db_name" < "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
-#REMOVEME? ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/mysql-schema"
+ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/mysql-schema"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -147,11 +82,11 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Compiling guacd..." --weight=30
 
-pushd "$install_dir/.guacd-src" || ynh_die
+pushd "$install_dir/.guacd-src"
 	./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --data_dir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
 	ynh_exec_warn_less make
 	ynh_exec_warn_less make install
-popd || ynh_die
+popd
 
 #=================================================
 # SETUP TOMCAT
@@ -165,6 +100,7 @@ ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
 #=================================================
 # CREATE LOG DIRS
 #=================================================
+
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
@@ -233,26 +169,6 @@ ynh_script_progression --message="Configuring Fail2Ban..." --weight=1
 
 # Create a dedicated Fail2Ban config
 ynh_add_fail2ban_config --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=1
-
-# Make app public if necessary
-#REMOVEME? if [ $is_public -eq 1 ]
-then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

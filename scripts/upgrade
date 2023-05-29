@@ -10,42 +10,10 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
-
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-
-#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
-#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
-#REMOVEME? admin=$(ynh_app_setting_get --app=$app --key=admin)
-#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
-#REMOVEME? port=$(ynh_app_setting_get --app=$app --key=port)
-#REMOVEME? guacd_port=$(ynh_app_setting_get --app=$app --key=guacd_port)
-#REMOVEME? db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-#REMOVEME? db_user=$db_name
-#REMOVEME? db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-
-#=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
-
-# Backup the current version of the app
-#REMOVEME? ynh_backup_before_upgrade
-#REMOVEME? ynh_clean_setup () {
-	# Restore it if the upgrade fails
-#REMOVEME? 	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -63,8 +31,8 @@ ynh_systemd_action --service_name="$app-tomcat" --action="stop" --log_path="/var
 #REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create dedicated users (if not existing)
-#REMOVEME? ynh_system_user_create --username="$app-guacd"
-#REMOVEME? ynh_system_user_create --username="$app-tomcat"
+ynh_system_user_create --username="$app-guacd"
+ynh_system_user_create --username="$app-tomcat"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -89,7 +57,7 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=1
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
@@ -122,11 +90,11 @@ fi
 #=================================================
 ynh_script_progression --message="Compiling guacd..." --weight=30
 
-pushd "$install_dir/.guacd-src" || ynh_die
+pushd "$install_dir/.guacd-src"
 	./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --data_dir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
 	ynh_exec_warn_less make
 	ynh_exec_warn_less make install
-popd || ynh_die
+popd
 
 #=================================================
 # SETUP TOMCAT
@@ -140,6 +108,7 @@ ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
 #=================================================
 # CREATE LOG DIRS
 #=================================================
+
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 #=================================================
@@ -207,13 +176,6 @@ ynh_script_progression --message="Reconfiguring Fail2Ban..." --weight=1
 
 # Create a dedicated Fail2Ban config
 ynh_add_fail2ban_config --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
