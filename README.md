@@ -24,12 +24,6 @@ Clientless remote desktop gateway. It supports standard protocols like VNC, RDP,
 
 ![Screenshot of Guacamole](./doc/screenshots/screenshot1.jpg)
 
-## Disclaimers / important information
-
-## Configuration
-
-The user that is configured as admin during install will have access to admin settings in the settings menu of the app (under the user menu). Configuration files are in `/opt/yunohost/guacamole/etc/guacamole` (for the first install).
-
 ## Documentation and resources
 
 * Official app website: <https://guacamole.apache.org/>
