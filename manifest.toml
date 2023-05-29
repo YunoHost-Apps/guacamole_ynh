@@ -45,8 +45,8 @@ ram.runtime = "50M"
 [resources]
     [resources.sources]
         [resources.sources.auth-header]
-        url = "https://downloads.apache.org/guacamole/1.5.1/binary/guacamole-auth-header-1.5.1.tar.gz"
-        sha256 = "aea94a4d59370026edd0fb8d0bd8cd1090176eb2d10218dd27ede134a0647590"
+        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-header-1.5.2.tar.gz"
+        sha256 = "c80c11de87993e1732d65c059d53d400961afcf61e7c12501bc2197002af7730"
 
         [resources.sources.mariadb-java-client]
         url = "https://downloads.mariadb.com/Connectors/java/connector-java-2.7.4/mariadb-java-client-2.7.4.jar"
@@ -57,8 +57,8 @@ ram.runtime = "50M"
         sha256 = "4d32bb2aab09f9f99d02faa3db82c7c9ff3e5f84de9b042fba3a5f745f2704e8"
 
         [resources.sources.client]
-        url = "https://downloads.apache.org/guacamole/1.5.1/binary/guacamole-1.5.1.war"
-        sha256 = "b740f82ec05f40598e6f1c3b16d4d3798afe2872c051296e70785bf9292d0269"
+        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-1.5.2.war"
+        sha256 = "86efc30016e4038948d8c1a5c37a0b05e38dadd3104db6ec03755bc6e3111c40"
         in_subdir = false
 
         [resources.sources.server]
