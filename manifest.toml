@@ -62,7 +62,7 @@ ram.runtime = "50M"
         in_subdir = false
 
         [resources.sources.server]
-        url = "https://downloads.apache.org/guacamole/1.5.1/source/guacamole-server-1.5.1.tar.gz"
+        url = "https://downloads.apache.org/guacamole/1.5.2/source/guacamole-server-1.5.2.tar.gz"
         sha256 = "a8d4813feaeb1e6f35fbfd2cf57cb0429db2225960cbfed36252f65ac93dffc4"
 
         [resources.sources.tomcat9_deb]
