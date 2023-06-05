@@ -16,7 +16,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH
+Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH
 
 **Version incluse :** 1.5.2~ynh1
 
