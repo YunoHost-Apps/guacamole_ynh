@@ -21,15 +21,15 @@ function setup_sources {
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir"
 
 	ynh_setup_source --source_id="auth-ldap" --dest_dir="$install_dir/etc/guacamole/extensions/ldap"
-	mv "$install_dir/etc/guacamole/extensions/ldap/guacamole-auth-ldap-$guacamole_verson.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-ldap.jar"
+	mv "$install_dir/etc/guacamole/extensions/ldap/guacamole-auth-ldap-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-ldap.jar"
 	ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/ldap"
 
 	ynh_setup_source --source_id="auth-header" --dest_dir="$install_dir/etc/guacamole/extensions/header"
-	mv "$install_dir/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_verson.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-header.jar"
+	mv "$install_dir/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-header.jar"
 	ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/header"
 
 	ynh_setup_source --source_id="auth-jdbc" --dest_dir="$install_dir/etc/guacamole/extensions/jdbc"
-	mv "$install_dir/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_verson.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
+	mv "$install_dir/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
 	mv "$install_dir/etc/guacamole/extensions/jdbc/mysql/schema" "$install_dir/etc/guacamole/extensions/mysql-schema"
 	ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/jdbc"
 
