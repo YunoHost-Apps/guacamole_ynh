@@ -35,7 +35,7 @@ The user that is configured as admin during install will have access to admin se
 * Official app website: <https://guacamole.apache.org/>
 * Official admin documentation: <https://guacamole.apache.org/doc/gug/>
 * Upstream app code repository: <https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults>
-* YunoHost documentation for this app: <https://yunohost.org/app_guacamole>
+* YunoHost Store: <https://apps.yunohost.org/app/guacamole>
 * Report a bug: <https://github.com/YunoHost-Apps/guacamole_ynh/issues>
 
 ## Developer info
