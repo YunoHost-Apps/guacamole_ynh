@@ -16,11 +16,14 @@ admindoc = "https://guacamole.apache.org/doc/gug/"
 code = "https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults"
 
 [integration]
-yunohost = ">= 11.1.19"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
+
 ldap = true
+
 sso = false
+
 disk = "50M"
 ram.build = "50M"
 ram.runtime = "50M"
@@ -85,7 +88,7 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.apt]
-    packages = "mariadb-server acl build-essential libcairo2 libjpeg62-turbo-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9"
+    packages = "mariadb-server, acl, build-essential, libcairo2, libjpeg62-turbo-dev, libpng-dev, libtool-bin, libossp-uuid-dev, libavcodec-dev, libavformat-dev, libavutil-dev, libswscale-dev, freerdp2-dev, libpango1.0-dev, libssh2-1-dev, libtelnet-dev, libvncserver-dev, libwebsockets-dev, libpulse-dev, libssl-dev, libvorbis-dev, libwebp-dev, tomcat9"
 
     [resources.database]
     type = "mysql"
