@@ -6,7 +6,7 @@
         "en": "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH",
         "fr": "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH"
     },
-    "version": "1.5.2~ynh2",
+    "version": "1.5.4~ynh1",
     "url": "https://guacamole.apache.org/",
     "upstream": {
         "license": "Apache-2.0",
@@ -20,7 +20,7 @@
         "email": "jules.bertholet@gmail.com"
     },
     "requirements": {
-        "yunohost": ">= 11.1.18"
+        "yunohost": ">= 11.2"
     },
     "multi_instance": true,
     "services": [
