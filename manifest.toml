@@ -71,7 +71,7 @@ ram.runtime = "50M"
         [resources.sources.tomcat9_deb]
         url = "https://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.70-1_all.deb"
         sha256 = "c062cd3ff27a566fdc6fed7dd2602c4e4ffe2216c8a19822bcaf03bd739e39b5"
-        format = "ar"
+        format = "whatever"
         rename = "tomcat9.deb"
 
         [resources.sources.auth-jdbc]
