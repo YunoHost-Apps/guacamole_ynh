@@ -9,7 +9,7 @@
 #=================================================
 
 function setup_sources {
-	guacamole_version="1.5.2"
+	guacamole_version="1.5.4"
 
 	ynh_setup_source --source_id="server" --dest_dir="$install_dir/.guacd-src"
 
