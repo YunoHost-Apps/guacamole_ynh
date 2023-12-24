@@ -5,7 +5,7 @@ name = "Guacamole"
 description.en = "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH"
 description.fr = "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH"
 
-version = "1.5.2~ynh1"
+version = "1.5.4~ynh1"
 
 maintainers = ["Jules Bertholet"]
 
@@ -48,25 +48,25 @@ ram.runtime = "50M"
 [resources]
     [resources.sources]
         [resources.sources.auth-header]
-        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-header-1.5.2.tar.gz"
-        sha256 = "c80c11de87993e1732d65c059d53d400961afcf61e7c12501bc2197002af7730"
+        url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-header-1.5.4.tar.gz"
+        sha256 = "7a0adc0daa19ec69a0244f491222c62124b02f81f40aa91e9a94d06a2635d038"
 
         [resources.sources.mariadb-java-client]
         url = "https://downloads.mariadb.com/Connectors/java/connector-java-2.7.4/mariadb-java-client-2.7.4.jar"
         sha256 = "f06577b19e89b33028b96cd4f031248e761de7ebc712f4ef535e268df76edb2a"
 
         [resources.sources.auth-ldap]
-        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-ldap-1.5.2.tar.gz"
-        sha256 = "49420bbe6f12f56a6ad8b31139512f289faada004074709b6a3a8e1475e9bd23"
+        url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-ldap-1.5.4.tar.gz"
+        sha256 = "f912fe921cd0d429a752709e31a37b931e95d88a47bc4007ab49377d1c1a6336"
 
         [resources.sources.client]
-        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-1.5.2.war"
-        sha256 = "86efc30016e4038948d8c1a5c37a0b05e38dadd3104db6ec03755bc6e3111c40"
+        url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war"
+        sha256 = "5728b563911bd64bce0a0b81c74ea8ccb2190d1785bff34030fc6885a8273d3e"
         in_subdir = false
 
         [resources.sources.server]
-        url = "https://downloads.apache.org/guacamole/1.5.2/source/guacamole-server-1.5.2.tar.gz"
-        sha256 = "a8d4813feaeb1e6f35fbfd2cf57cb0429db2225960cbfed36252f65ac93dffc4"
+        url = "https://downloads.apache.org/guacamole/1.5.4/source/guacamole-server-1.5.4.tar.gz"
+        sha256 = "4c0add552b1fc387c23a35c430155e01f2dfcf9daa0f96fbf805d0ace756729e"
 
         [resources.sources.tomcat9_deb]
         url = "https://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.70-1_all.deb"
@@ -75,8 +75,8 @@ ram.runtime = "50M"
         rename = "tomcat9.deb"
 
         [resources.sources.auth-jdbc]
-        url = "https://downloads.apache.org/guacamole/1.5.2/binary/guacamole-auth-jdbc-1.5.2.tar.gz"
-        sha256 = "0c050fcf9e062eadb242f2962217870919cd02a119bc3e71d77efdd4b7f88e06"
+        url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-jdbc-1.5.4.tar.gz"
+        sha256 = "f45736b28eb6647b7eb0d2b48331e12e5a432661f61115b63d1a05a5bd20244d"
 
     [resources.ports]
     main.default = 8080
