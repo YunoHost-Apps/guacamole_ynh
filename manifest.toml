@@ -82,6 +82,8 @@ ram.runtime = "50M"
     main.default = 8080
     guacd.default = 4822
 
+    [resources.system_user]
+
     [resources.install_dir]
 
     [resources.permissions]
