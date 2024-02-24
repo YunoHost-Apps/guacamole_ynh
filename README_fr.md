@@ -28,7 +28,7 @@ Guacamole is a clientless remote desktop gateway. It supports standard protocols
 
 * Site officiel de l’app : <https://guacamole.apache.org/>
 * Documentation officielle de l’admin : <https://guacamole.apache.org/doc/gug/>
-* Dépôt de code officiel de l’app : <https://github.com/search?utf8=%E2%9C%93&q=repo%3Aapache%2Fguacamole-server+repo%3Aapache%2Fguacamole-client+repo%3Aapache%2Fguacamole-website&type=Repositories&ref=searchresults>
+* Dépôt de code officiel de l’app : <https://github.com/apache/guacamole-server>
 * YunoHost Store: <https://apps.yunohost.org/app/guacamole>
 * Signaler un bug : <https://github.com/YunoHost-Apps/guacamole_ynh/issues>
 
