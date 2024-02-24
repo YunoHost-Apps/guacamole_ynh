@@ -18,7 +18,8 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
-	ynh_setup_source --source_id="client" --dest_dir="$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir"
+	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
+	mv "$install_dir/downloads/guacamole.war" "var/lib/tomcat9/webapps/$tomcat_guac_dir.war"
 
 	mkdir -p "$install_dir/etc/guacamole/extensions"
 
