@@ -18,23 +18,23 @@ ynh_script_progression --message="Installing dependencies..." --weight=1
 # But installing Tomcat from the Debian repos automatically enables and starts it.
 # So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
 
-# tomcat_enabled=""
-# tomcat_active=""
-# if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-# 	if (systemctl is-enabled tomcat9 --quiet); then
-# 		tomcat_enabled=1
-# 	fi
-# 	if (systemctl is-active tomcat9 --quiet); then
-# 		tomcat_active=1
-# 	fi
-# fi
+tomcat_enabled=""
+tomcat_active=""
+if [ "$(systemctl cat tomcat9 --quiet)" ]; then
+	if (systemctl is-enabled tomcat9 --quiet); then
+		tomcat_enabled=1
+	fi
+	if (systemctl is-active tomcat9 --quiet); then
+		tomcat_active=1
+	fi
+fi
 
-# if [ ! $tomcat_enabled ]; then
-# 	systemctl disable tomcat9 --quiet
-# fi
-# if [ ! $tomcat_active ]; then
-# 	systemctl stop tomcat9 --quiet
-# fi
+if [ ! $tomcat_enabled ]; then
+	systemctl disable tomcat9 --quiet
+fi
+if [ ! $tomcat_active ]; then
+	systemctl stop tomcat9 --quiet
+fi
 
 #=================================================
 # CREATE DEDICATED USERS

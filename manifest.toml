@@ -119,7 +119,7 @@ ram.runtime = "50M"
         "libssl-dev",
         "libvorbis-dev",
         "libwebp-dev",
-        # "tomcat9",
+        "tomcat9",
     ]
 
     [resources.database]
