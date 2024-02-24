@@ -77,6 +77,7 @@ ram.runtime = "50M"
     sha256 = "f06577b19e89b33028b96cd4f031248e761de7ebc712f4ef535e268df76edb2a"
     format = "whatever"
     extract = false
+    rename = "mariadb-java-client.jar"
 
     [resources.sources.tomcat9_deb]
     url = "https://ftp.debian.org/debian/pool/main/t/tomcat9/tomcat9_9.0.43-2~deb11u9_all.deb"
