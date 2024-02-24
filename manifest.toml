@@ -45,7 +45,7 @@ ram.runtime = "50M"
     help.en = "Not recommended"
     help.fr = "Pas reccomandé"
     type = "group"
-    default = false
+    default = "all_users"
 
 [resources]
     [resources.sources]
