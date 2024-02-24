@@ -55,6 +55,7 @@ ram.runtime = "50M"
         url = "https://downloads.mariadb.com/Connectors/java/connector-java-2.7.4/mariadb-java-client-2.7.4.jar"
         sha256 = "f06577b19e89b33028b96cd4f031248e761de7ebc712f4ef535e268df76edb2a"
         format = "whatever"
+        extract = false
 
         [resources.sources.auth-ldap]
         url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-ldap-1.5.4.tar.gz"
@@ -63,8 +64,8 @@ ram.runtime = "50M"
         [resources.sources.client]
         url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war"
         sha256 = "5728b563911bd64bce0a0b81c74ea8ccb2190d1785bff34030fc6885a8273d3e"
-        in_subdir = false
         format = "whatever"
+        extract = false
 
         [resources.sources.server]
         url = "https://downloads.apache.org/guacamole/1.5.4/source/guacamole-server-1.5.4.tar.gz"
@@ -74,6 +75,7 @@ ram.runtime = "50M"
         url = "https://ftp.debian.org/debian/pool/main/t/tomcat9/libtomcat9-java_9.0.70-2_all.deb"
         sha256 = "537c290cf5499eb09323c14f096be6f2946bba8968c089d8c8c21952bc8768ff"
         format = "whatever"
+        extract = false
         rename = "tomcat9.deb"
 
         [resources.sources.auth-jdbc]
