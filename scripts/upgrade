@@ -92,8 +92,8 @@ ynh_script_progression --message="Compiling guacd..." --weight=30
 
 pushd "$install_dir/.guacd-src"
 	LDFLAGS="-lrt" ./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --datadir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
-	ynh_exec_warn_less make
-	ynh_exec_warn_less make install
+	ynh_exec_warn_less env LDFLAGS="-lrt" make
+	ynh_exec_warn_less env LDFLAGS="-lrt" make install
 popd
 
 #=================================================

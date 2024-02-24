@@ -56,8 +56,8 @@ ram.runtime = "50M"
     [resources.sources.client]
     url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war"
     sha256 = "5728b563911bd64bce0a0b81c74ea8ccb2190d1785bff34030fc6885a8273d3e"
-    format = "whatever"
-    extract = false
+    format = "zip"
+    extract = true
 
     [resources.sources.auth-header]
     url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-header-1.5.4.tar.gz"
@@ -119,7 +119,7 @@ ram.runtime = "50M"
         "libssl-dev",
         "libvorbis-dev",
         "libwebp-dev",
-        "tomcat9",
+        # "tomcat9",
     ]
 
     [resources.database]
