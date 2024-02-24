@@ -42,8 +42,8 @@ fi
 ynh_script_progression --message="Configuring system users..." --weight=1
 
 # Create system users
-ynh_system_user_create --username="$app-guacd"
-ynh_system_user_create --username="$app-tomcat"
+ynh_system_user_create --username="$app-guacd" --groups="$app"
+ynh_system_user_create --username="$app-tomcat" --groups="$app"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCES
