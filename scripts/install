@@ -29,10 +29,10 @@ if [ "$(systemctl cat tomcat9 --quiet)" ]; then
 	fi
 fi
 
-if [ ! $tomcat_enabled ]; then
+if [ $tomcat_enabled ]; then
 	systemctl disable tomcat9 --quiet
 fi
-if [ ! $tomcat_active ]; then
+if [ $tomcat_active ]; then
 	systemctl stop tomcat9 --quiet
 fi
 
