@@ -20,6 +20,8 @@ function setup_sources {
 
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir"
 
+	mkdir -p "$install_dir/etc/guacamole/extensions"
+
 	ynh_setup_source --source_id="auth-ldap" --dest_dir="$install_dir/downloads/auth-ldap"
 	mv "$install_dir/downloads/auth-ldap/guacamole-auth-ldap-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-ldap.jar"
 
