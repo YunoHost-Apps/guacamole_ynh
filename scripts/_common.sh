@@ -28,7 +28,7 @@ function setup_sources {
 	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
 
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
-	mkdir -p "$install_dir/var/lib/tomcat9"
+	mkdir -p "$install_dir/var/lib/tomcat9/webapps"
 	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir.war"
 
 	mkdir -p "$install_dir/etc/guacamole/extensions"
