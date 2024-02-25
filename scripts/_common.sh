@@ -48,6 +48,22 @@ function setup_sources {
 	ynh_secure_remove --file="$install_dir/downloads/"
 }
 
+function _set_permissions() {
+	# Set permissions  to app files
+	chown -R "$app:$app" "$install_dir"
+	chmod -R g+rwX,o-rwx "$install_dir"
+	setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
+	setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
+
+	# chown -R nobody:$app-tomcat "$install_dir/etc/tomcat9/" "$install_dir/etc/guacamole/"
+	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/var/lib/tomcat9/webapps"
+	setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
+		"$install_dir/var/lib/tomcat9/" "$install_dir/etc/guacamole/" "$install_dir/etc/tomcat9/"
+
+	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
+}
+
 #=================================================
 # EXPERIMENTAL HELPERS
 #=================================================
