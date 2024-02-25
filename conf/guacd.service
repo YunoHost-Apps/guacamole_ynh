@@ -6,10 +6,10 @@ After=network.target
 Type=simple
 User=__APP__-guacd
 Group=__APP__-guacd
-ExecStart=__FINALPATH__/sbin/guacd -f -l __GUACD_PORT__ >> /var/log/__APP__/guacd.log 2>&1
+ExecStart=__INSTALL_DIR__/sbin/guacd -f -l __PORT_GUACD__ >> /var/log/__APP__/guacd.log 2>&1
 Restart=on-abnormal
-Environment="LD_LIBRARY_PATH=__FINALPATH__/lib:__FINALPATH__/usr/lib"
-Environment="GUACAMOLE_HOME=__FINALPATH__/etc/guacamole"
+Environment="LD_LIBRARY_PATH=__INSTALL_DIR__/lib:__INSTALL_DIR__/usr/lib"
+Environment="GUACAMOLE_HOME=__INSTALL_DIR__/etc/guacamole"
 
 # Sandboxing options to harden security
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html

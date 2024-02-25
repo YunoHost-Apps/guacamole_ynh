@@ -11,76 +11,9 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
+# STOP TOMCAT
 #=================================================
-
-ynh_clean_setup () {
-	true
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_user=$db_name
-
-#=================================================
-# CHECK IF THE APP CAN BE RESTORED
-#=================================================
-ynh_script_progression --message="Validating restoration parameters..." --weight=1
-
-test ! -d $final_path \
-	|| ynh_die --message="There is already a directory: $final_path "
-
-#=================================================
-# STANDARD RESTORATION STEPS
-#=================================================
-# RESTORE THE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the NGINX web server configuration..."
-
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
-
-#=================================================
-# RECREATE THE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
-
-# Create the dedicated user (if not existing)
-ynh_system_user_create --username="$app-guacd"
-ynh_system_user_create --username="$app-tomcat"
-
-#=================================================
-# RESTORE THE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Restoring the app main directory..." --weight=1
-
-ynh_restore_file --origin_path="$final_path"
-
-#=================================================
-# RESTORE FAIL2BAN CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the Fail2Ban configuration..." --weight=1
-
-ynh_restore_file "/etc/fail2ban/jail.d/$app.conf"
-ynh_restore_file "/etc/fail2ban/filter.d/$app.conf"
-ynh_systemd_action --action=restart --service_name=fail2ban
-
-#=================================================
-# SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Reinstalling dependencies..." --weight=1
+ynh_script_progression --message="Stopping system tomcat..." --weight=1
 
 tomcat_enabled=""
 tomcat_active=""
@@ -93,9 +26,6 @@ if [ "$(systemctl cat tomcat9 --quiet)" ]; then
 	fi
 fi
 
-# Define and install dependencies
-ynh_install_app_dependencies $pkg_dependencies
-
 if [ ! $tomcat_enabled ]; then
 	systemctl disable tomcat9 --quiet
 fi
@@ -104,25 +34,27 @@ if [ ! $tomcat_active ]; then
 fi
 
 #=================================================
-# RESTORE USER RIGHTS
+# RESTORE THE APP MAIN DIR
 #=================================================
+ynh_script_progression --message="Restoring the app main directory..." --weight=1
 
-# Restore permissions on app files
-chown -R nobody $final_path
-chmod -R o-rwx $final_path
-setfacl -n -R -m user:$app-guacd:rx -m default:user:$app-guacd:rx $final_path
-setfacl -n -R -m user:$app-tomcat:rx -m default:user:$app-tomcat:rx $final_path
-chown -R nobody:$app-tomcat "$final_path/etc/tomcat9/" "$final_path/etc/guacamole/"
-chown -R "$app-tomcat":"$app-tomcat" "$final_path/var/lib/tomcat9/webapps"
-setfacl -n -R -m user:$app-guacd:- -m default:user:$app-guacd:- "$final_path/var/lib/tomcat9/" "$final_path/etc/guacamole/" "$final_path/etc/tomcat9/"
+ynh_restore_file --origin_path="$install_dir"
+chown -R "$app:www-data" "$install_dir"
+
+#=================================================
+# RECREATE THE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
+
+# Create the dedicated user (if not existing)
+ynh_system_user_create --username="$app-guacd"
+ynh_system_user_create --username="$app-tomcat"
 
 #=================================================
 # RESTORE THE MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Restoring the MySQL database..." --weight=1
 
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name --db_pwd=$db_pwd
 ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./db.sql
 
 #=================================================
@@ -131,48 +63,37 @@ ynh_mysql_connect_as --user=$db_user --password=$db_pwd --database=$db_name < ./
 ynh_script_progression --message="Restoring various files..."
 
 ynh_restore_file --origin_path="/var/log/$app"
-chown -R $app-guacd:$app-guacd "/var/log/$app/guacd/"
-chown -R $app-tomcat:$app-tomcat "/var/log/$app/tomcat/"
+
+_set_permissions
 
 #=================================================
-# RESTORE SYSTEMD
+# RESTORE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
+ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
+
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+ynh_restore_file "/etc/fail2ban/jail.d/$app.conf"
+ynh_restore_file "/etc/fail2ban/filter.d/$app.conf"
+ynh_systemd_action --action=restart --service_name=fail2ban
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app-guacd.service"
-ynh_restore_file --origin_path="/etc/systemd/system/$app-tomcat.service"
 systemctl enable "$app-guacd.service" --quiet
-systemctl enable "$app-tomcat.service" --quiet
-
-#=================================================
-# INTEGRATE SERVICES IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating services in YunoHost..." --weight=1
-
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app-tomcat.service"
+systemctl enable "$app-tomcat.service" --quiet
 yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
-
-#=================================================
-# START SYSTEMD SERVICES
-#=================================================
-ynh_script_progression --message="Starting systemd services..." --weight=1
-
-ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
-
-#=================================================
-# RESTORE THE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the logrotate configuration..."
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
-# GENERIC FINALIZATION
+# START SYSTEMD SERVICES
 #=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+ynh_script_progression --message="Starting NGINX and $app's systemd services..." --weight=1
+
+ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
+ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
 
 ynh_systemd_action --service_name=nginx --action=reload
 

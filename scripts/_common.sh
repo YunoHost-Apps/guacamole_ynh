@@ -4,53 +4,64 @@
 # COMMON VARIABLES
 #=================================================
 
-# dependencies used by the app
-pkg_dependencies="acl build-essential libcairo2 libjpeg62-turbo-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev libvorbis-dev libwebp-dev tomcat9"
+guacamole_version="1.5.4"
 
 #=================================================
 # PERSONAL HELPERS
 #=================================================
 
 function setup_sources {
-	guacamole_version="1.5.4"
+	ynh_setup_source --source_id="server" --dest_dir="$install_dir/.guacd-src"
 
-	ynh_setup_source --source_id="server" --dest_dir="$final_path/.guacd-src"
-
-	tomcat_guac_dir="$path_url"
-	if [ "$path_url" == "/" -o -z "$path_url" ]; then
+	tomcat_guac_dir="$path"
+	if [ "$path" == "/" -o -z "$path" ]; then
 		tomcat_guac_dir="ROOT"
 	fi
 
-	ynh_setup_source --source_id="client" --dest_dir="$final_path/var/lib/tomcat9/webapps/$tomcat_guac_dir"
-
-	ynh_setup_source --source_id="auth-ldap" --dest_dir="$final_path/etc/guacamole/extensions/ldap"
-	mv "$final_path/etc/guacamole/extensions/ldap/guacamole-auth-ldap-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-ldap.jar"
-	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/ldap"
-
-	ynh_setup_source --source_id="auth-header" --dest_dir="$final_path/etc/guacamole/extensions/header"
-	mv "$final_path/etc/guacamole/extensions/header/guacamole-auth-header-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-header.jar"
-	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/header"
-
-	ynh_setup_source --source_id="auth-jdbc" --dest_dir="$final_path/etc/guacamole/extensions/jdbc"
-	mv "$final_path/etc/guacamole/extensions/jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_version.jar" "$final_path/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
-	mv "$final_path/etc/guacamole/extensions/jdbc/mysql/schema" "$final_path/etc/guacamole/extensions/mysql-schema"
-	ynh_secure_remove --file="$final_path/etc/guacamole/extensions/jdbc"
-
-	ynh_setup_source --source_id="mariadb-java-client" --dest_dir="$final_path/etc/guacamole/lib/"
-
-	ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$final_path/"
-
-	pushd "$final_path" || ynh_die
-	ar x "$final_path/tomcat9.deb" "data.tar.xz"
+	ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$install_dir/downloads/tomcat9"
+	pushd "$install_dir/downloads/tomcat9" || ynh_die
+		ar x "tomcat9.deb" "data.tar.xz"
+		tar xJf data.tar.xz
 	popd || ynh_die
+	mkdir -p "$install_dir/etc"
+	cp -r "$install_dir/downloads/tomcat9/usr/share/tomcat9/etc" -T "$install_dir/etc/tomcat9/"
+	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
 
-	ynh_secure_remove --file="$final_path/tomcat9.deb"
-	mkdir -p "$final_path/tomcat9-data"
-	tar -C "$final_path/tomcat9-data" -xJf "$final_path/data.tar.xz"
-	cp -r "$final_path/tomcat9-data/usr/share/tomcat9/etc" -T "$final_path/etc/tomcat9/"
-	cp -r "$final_path/tomcat9-data/etc/tomcat9/" -T "$final_path/etc/tomcat9/"
-	ynh_secure_remove --file="$final_path/data.tar.xz"
-	ynh_secure_remove --file="$final_path/tomcat9-data"
+	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
+	mkdir -p "$install_dir/var/lib/tomcat9/webapps"
+	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir.war"
+
+	mkdir -p "$install_dir/etc/guacamole/extensions"
+
+	ynh_setup_source --source_id="auth-ldap" --dest_dir="$install_dir/downloads/auth-ldap"
+	mv "$install_dir/downloads/auth-ldap/guacamole-auth-ldap-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-ldap.jar"
+
+	ynh_setup_source --source_id="auth-header" --dest_dir="$install_dir/downloads/auth-header"
+	mv "$install_dir/downloads/auth-header/guacamole-auth-header-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-header.jar"
+
+	ynh_setup_source --source_id="auth-jdbc" --dest_dir="$install_dir/downloads/auth-jdbc"
+	mv "$install_dir/downloads/auth-jdbc/mysql/guacamole-auth-jdbc-mysql-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar"
+	mv "$install_dir/downloads/auth-jdbc/mysql/schema" "$install_dir/etc/guacamole/extensions/mysql-schema"
+
+	ynh_setup_source --source_id="mariadb-java-client" --dest_dir="$install_dir/etc/guacamole/lib/"
+
+	ynh_secure_remove --file="$install_dir/downloads/"
+}
+
+function _set_permissions() {
+	# Set permissions  to app files
+	chown -R "$app:$app" "$install_dir"
+	chmod -R g+rwX,o-rwx "$install_dir"
+	setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
+	setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
+
+	# chown -R nobody:$app-tomcat "$install_dir/etc/tomcat9/" "$install_dir/etc/guacamole/"
+	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/var/lib/tomcat9/webapps"
+	setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
+		"$install_dir/var/lib/tomcat9/" "$install_dir/etc/guacamole/" "$install_dir/etc/tomcat9/"
+
+	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
 }
 
 #=================================================

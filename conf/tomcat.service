@@ -1,16 +1,16 @@
 [Unit]
 Description=Apache Tomcat 9 Web Application Server
 After=network.target
-RequiresMountsFor=/var/log/__APP__/tomcat __FINALPATH__/var/lib/tomcat9
+RequiresMountsFor=/var/log/__APP__/tomcat __INSTALL_DIR__/var/lib/tomcat9
 
 [Service]
 
 # Configuration
 Environment="CATALINA_HOME=/usr/share/tomcat9"
-Environment="CATALINA_BASE=__FINALPATH__/var/lib/tomcat9"
+Environment="CATALINA_BASE=__INSTALL_DIR__/var/lib/tomcat9"
 Environment="CATALINA_TMPDIR=/tmp"
 Environment="JAVA_OPTS=-Djava.awt.headless=true"
-Environment="GUACAMOLE_HOME=__FINALPATH__/etc/guacamole"
+Environment="GUACAMOLE_HOME=__INSTALL_DIR__/etc/guacamole"
 
 
 # Lifecycle
@@ -32,8 +32,8 @@ NoNewPrivileges=true
 CacheDirectory=__APP__-tomcat9
 CacheDirectoryMode=750
 ProtectSystem=strict
-ReadWritePaths=__FINALPATH__/etc/tomcat9/Catalina/
-ReadWritePaths=__FINALPATH__/var/lib/tomcat9/webapps/
+ReadWritePaths=__INSTALL_DIR__/etc/tomcat9/Catalina/
+ReadWritePaths=__INSTALL_DIR__/var/lib/tomcat9/webapps/
 ReadWritePaths=/var/log/__APP__/tomcat/
 
 [Install]
