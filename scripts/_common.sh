@@ -23,6 +23,7 @@ function setup_sources {
 		ar x "tomcat9.deb" "data.tar.xz"
 		tar xJf data.tar.xz
 	popd || ynh_die
+	mkdir -p "$install_dir/etc"
 	cp -r "$install_dir/downloads/tomcat9/usr/share/tomcat9/etc" -T "$install_dir/etc/tomcat9/"
 	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
 
