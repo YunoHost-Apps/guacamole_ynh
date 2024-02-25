@@ -10,13 +10,9 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD REMOVE
+# REMOVE SYSTEM CONFIGURATIONS
 #=================================================
-# REMOVE SERVICE INTEGRATION IN YUNOHOST
-#=================================================
-
-# Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
-ynh_script_progression --message="Removing $app service integration..." --weight=1
+ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
 
 if ynh_exec_warn_less yunohost service status $app-guacd >/dev/null; then
 	yunohost service remove "$app-guacd"
@@ -25,41 +21,19 @@ if ynh_exec_warn_less yunohost service status $app-tomcat >/dev/null; then
 	yunohost service remove "$app-tomcat"
 fi
 
-#=================================================
-# STOP AND REMOVE SERVICE
-#=================================================
-ynh_script_progression --message="Stopping and removing the systemd service..." --weight=1
-
 # Remove the dedicated systemd config
 ynh_remove_systemd_config --service="$app-guacd"
 ynh_remove_systemd_config --service="$app-tomcat"
 
-#=================================================
-# REMOVE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
-
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
-
-#=================================================
-# REMOVE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing logrotate configuration..." --weight=1
 
 # Remove the app-specific logrotate config
 ynh_remove_logrotate
 
-#=================================================
-# REMOVE FAIL2BAN CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing Fail2Ban configuration..." --weight=1
-
 # Remove the dedicated Fail2Ban config
 ynh_remove_fail2ban_config
 
-#=================================================
-# SPECIFIC REMOVE
 #=================================================
 # REMOVE VARIOUS FILES
 #=================================================
