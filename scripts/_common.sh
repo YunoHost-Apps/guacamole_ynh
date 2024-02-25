@@ -18,6 +18,14 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
+	ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$install_dir/downloads/tomcat9"
+	pushd "$install_dir/downloads/tomcat9" || ynh_die
+		ar x "tomcat9.deb" "data.tar.xz"
+		tar xJf data.tar.xz
+	popd || ynh_die
+	cp -r "$install_dir/downloads/tomcat9/usr/share/tomcat9/etc" -T "$install_dir/etc/tomcat9/"
+	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
+
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
 	ynh_exec_warn ls -lah "$install_dir/var/lib/tomcat9"
 	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir.war"
@@ -35,14 +43,6 @@ function setup_sources {
 	mv "$install_dir/downloads/auth-jdbc/mysql/schema" "$install_dir/etc/guacamole/extensions/mysql-schema"
 
 	ynh_setup_source --source_id="mariadb-java-client" --dest_dir="$install_dir/etc/guacamole/lib/"
-
-	ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$install_dir/downloads/tomcat9"
-	pushd "$install_dir/downloads/tomcat9" || ynh_die
-		ar x "tomcat9.deb" "data.tar.xz"
-		tar xJf data.tar.xz
-	popd || ynh_die
-	cp -r "$install_dir/downloads/tomcat9/usr/share/tomcat9/etc" -T "$install_dir/etc/tomcat9/"
-	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
 
 	ynh_secure_remove --file="$install_dir/downloads/"
 }
