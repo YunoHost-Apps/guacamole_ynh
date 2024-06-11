@@ -36,7 +36,7 @@ if [ $change_path -eq 1 ]; then
 		new_path_tomcat="ROOT"
 	fi
 
-	mv "$install_dir/var/lib/tomcat9/webapps/$old_path_tomcat" "$install_dir/var/lib/tomcat9/webapps/$new_path_tomcat"
+	mv "$install_dir/var/lib/$tomcat_version/webapps/$old_path_tomcat" "$install_dir/var/lib/$tomcat_version/webapps/$new_path_tomcat"
 fi
 
 #=================================================
