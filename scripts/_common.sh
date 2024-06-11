@@ -6,9 +6,9 @@
 
 guacamole_version="1.5.4"
 
-if [ "$debian_maj_version" -eq 11 ] ; then
+if [ "$ynh_debian_version" == "bullseye" ] ; then
     tomcat_version="tomcat9"
-elif [ "$debian_maj_version" -eq 12 ] ; then
+elif [ "$ynh_debian_version" == "bookworm" ] ; then
     tomcat_version="tomcat10"
 fi
 
