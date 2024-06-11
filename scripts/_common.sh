@@ -6,6 +6,12 @@
 
 guacamole_version="1.5.4"
 
+if [ "$debian_maj_version" -eq 11 ] ; then
+    tomcat_version="tomcat9"
+elif [ "$debian_maj_version" -eq 12 ] ; then
+    tomcat_version="tomcat10"
+fi
+
 #=================================================
 # PERSONAL HELPERS
 #=================================================
@@ -18,18 +24,18 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
-	ynh_setup_source --source_id="tomcat9_deb" --dest_dir="$install_dir/downloads/tomcat9"
-	pushd "$install_dir/downloads/tomcat9" || ynh_die
-		ar x "tomcat9.deb" "data.tar.xz"
+	ynh_setup_source --source_id="$tomcat_version_deb" --dest_dir="$install_dir/downloads/$tomcat_version"
+	pushd "$install_dir/downloads/$tomcat_version" || ynh_die
+		ar x "$tomcat_version.deb" "data.tar.xz"
 		tar xJf data.tar.xz
 	popd || ynh_die
 	mkdir -p "$install_dir/etc"
-	cp -r "$install_dir/downloads/tomcat9/usr/share/tomcat9/etc" -T "$install_dir/etc/tomcat9/"
-	cp -r "$install_dir/downloads/tomcat9/etc/tomcat9/" -T "$install_dir/etc/tomcat9/"
+	cp -r "$install_dir/downloads/$tomcat_version/usr/share/$tomcat_version/etc" -T "$install_dir/etc/$tomcat_version/"
+	cp -r "$install_dir/downloads/$tomcat_version/etc/$tomcat_version/" -T "$install_dir/etc/$tomcat_version/"
 
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
-	mkdir -p "$install_dir/var/lib/tomcat9/webapps"
-	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/tomcat9/webapps/$tomcat_guac_dir.war"
+	mkdir -p "$install_dir/var/lib/$tomcat_version/webapps"
+	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/$tomcat_version/webapps/$tomcat_guac_dir.war"
 
 	mkdir -p "$install_dir/etc/guacamole/extensions"
 
@@ -55,10 +61,10 @@ function _set_permissions() {
 	setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
 	setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
 
-	# chown -R nobody:$app-tomcat "$install_dir/etc/tomcat9/" "$install_dir/etc/guacamole/"
-	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/var/lib/tomcat9/webapps"
+	# chown -R nobody:$app-tomcat "$install_dir/etc/$tomcat_version/" "$install_dir/etc/guacamole/"
+	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/var/lib/$tomcat_version/webapps"
 	setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
-		"$install_dir/var/lib/tomcat9/" "$install_dir/etc/guacamole/" "$install_dir/etc/tomcat9/"
+		"$install_dir/var/lib/$tomcat_version/" "$install_dir/etc/guacamole/" "$install_dir/etc/$tomcat_version/"
 
 	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
 	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
