@@ -27,7 +27,7 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
-	ynh_setup_source --source_id="$tomcat_version_deb" --dest_dir="$install_dir/downloads/$tomcat_version"
+	ynh_setup_source --source_id="${tomcat_version}_deb" --dest_dir="$install_dir/downloads/$tomcat_version"
 	pushd "$install_dir/downloads/$tomcat_version" || ynh_die
 		ar x "$tomcat_version.deb" "data.tar.xz"
 		tar xJf data.tar.xz
