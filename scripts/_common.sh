@@ -4,7 +4,7 @@
 # COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
-guacamole_version="1.5.4"
+guacamole_version="$(ynh_app_upstream_version)"
 
 
 debian_maj_version=$(sed 's/\..*//' /etc/debian_version)
