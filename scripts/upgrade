@@ -65,20 +65,20 @@ ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
 tomcat_enabled=""
 tomcat_active=""
-if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-	if (systemctl is-enabled tomcat9 --quiet); then
+if [ "$(systemctl cat $tomcat_version --quiet)" ]; then
+	if (systemctl is-enabled $tomcat_version --quiet); then
 		tomcat_enabled=1
 	fi
-	if (systemctl is-active tomcat9 --quiet); then
+	if (systemctl is-active $tomcat_version --quiet); then
 		tomcat_active=1
 	fi
 fi
 
 if [ ! $tomcat_enabled ]; then
-	systemctl disable tomcat9 --quiet
+	systemctl disable $tomcat_version --quiet
 fi
 if [ ! $tomcat_active ]; then
-	systemctl stop tomcat9 --quiet
+	systemctl stop $tomcat_version --quiet
 fi
 
 #=================================================
@@ -99,9 +99,9 @@ popd
 #=================================================
 
 mkdir -p "$install_dir/etc/"
-ln -s -f "$install_dir/etc/tomcat9" "$install_dir/var/lib/tomcat9/conf"
-ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/tomcat9/logs"
-ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
+ln -s -f "$install_dir/etc/$tomcat_version" "$install_dir/var/lib/$tomcat_version/conf"
+ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/var/lib/$tomcat_version/work"
 
 #=================================================
 # CREATE LOG DIRS
@@ -115,7 +115,7 @@ mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 
 ynh_add_config --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
 
-ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$install_dir/etc/tomcat9/server.xml"
+ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$install_dir/etc/$tomcat_version/server.xml"
 
 #=================================================
 # SETUP SYSTEMD
