@@ -49,27 +49,27 @@ ram.runtime = "50M"
 [resources]
     [resources.sources]
     [resources.sources.server]
-    url = "https://downloads.apache.org/guacamole/1.5.4/source/guacamole-server-1.5.4.tar.gz"
-    sha256 = "4c0add552b1fc387c23a35c430155e01f2dfcf9daa0f96fbf805d0ace756729e"
+    url = "https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz"
+    sha256 = "67499611c2e22d9c933763adc5408e716a4bfd08a3eb8a5ba2fc6f8f70868f6b"
 
     [resources.sources.client]
-    url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war"
-    sha256 = "5728b563911bd64bce0a0b81c74ea8ccb2190d1785bff34030fc6885a8273d3e"
+    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war"
+    sha256 = "4267307f3600663723f24af92d596e99c8359425315135052a42d451f9529200"
     format = "zip"
     extract = false
     rename = "guacamole.war"
 
     [resources.sources.auth-header]
-    url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-header-1.5.4.tar.gz"
-    sha256 = "7a0adc0daa19ec69a0244f491222c62124b02f81f40aa91e9a94d06a2635d038"
+    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-header-1.5.5.tar.gz"
+    sha256 = "a39ca9563be6d31b4dc1251c76a62baeb2a9d4930b3055e342bb9ce80e526a78"
 
     [resources.sources.auth-ldap]
-    url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-ldap-1.5.4.tar.gz"
-    sha256 = "f912fe921cd0d429a752709e31a37b931e95d88a47bc4007ab49377d1c1a6336"
+    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-ldap-1.5.5.tar.gz"
+    sha256 = "01d3cd74da5de9da9cc73a788ab2938dd44f5cbe42ad90eebb4bee07f246dfa3"
 
     [resources.sources.auth-jdbc]
-    url = "https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-jdbc-1.5.4.tar.gz"
-    sha256 = "f45736b28eb6647b7eb0d2b48331e12e5a432661f61115b63d1a05a5bd20244d"
+    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz"
+    sha256 = "80cca0a02076babad0dc7c76b60daa896f3d9bf10be82708f425fd42ce411393"
 
     [resources.sources.mariadb-java-client]
     url = "https://downloads.mariadb.com/Connectors/java/connector-java-2.7.4/mariadb-java-client-2.7.4.jar"
