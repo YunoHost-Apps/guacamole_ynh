@@ -4,7 +4,7 @@
 # COMMON VARIABLES
 #=================================================
 
-guacamole_version="$(ynh_app_upstream_version)"
+guacamole_version="1.5.5"
 
 
 debian_maj_version=$(sed 's/\..*//' /etc/debian_version)
