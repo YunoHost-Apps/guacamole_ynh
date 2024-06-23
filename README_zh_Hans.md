@@ -3,7 +3,7 @@
 请勿手动编辑。
 -->
 
-# YunoHost 的 Guacamole
+# YunoHost 上的 Guacamole
 
 [![集成程度](https://dash.yunohost.org/integration/guacamole.svg)](https://dash.yunohost.org/appci/app/guacamole) ![工作状态](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
 
