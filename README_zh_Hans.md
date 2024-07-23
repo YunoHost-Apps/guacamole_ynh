@@ -5,7 +5,7 @@
 
 # YunoHost 上的 Guacamole
 
-[![集成程度](https://dash.yunohost.org/integration/guacamole.svg)](https://dash.yunohost.org/appci/app/guacamole) ![工作状态](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
 
 [![使用 YunoHost 安装 Guacamole](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
