@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Guacamole pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/guacamole.svg)](https://dash.yunohost.org/appci/app/guacamole) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
 
 [![Installer Guacamole avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
@@ -18,7 +18,7 @@ Il NE doit PAS être modifié à la main.
 
 Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH
 
-**Version incluse :** 1.5.4~ynh1
+**Version incluse :** 1.5.4~ynh2
 
 ## Captures d’écran
 
