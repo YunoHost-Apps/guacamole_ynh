@@ -4,7 +4,7 @@
 # COMMON VARIABLES
 #=================================================
 
-guacamole_version="1.5.4"
+guacamole_version="1.5.5"
 
 #=================================================
 # PERSONAL HELPERS
