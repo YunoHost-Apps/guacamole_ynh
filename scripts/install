@@ -11,22 +11,10 @@ ynh_script_progression "Stopping system tomcat..."
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
 # So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
-
-tomcat_enabled=""
-tomcat_active=""
-if [ "$(systemctl cat $tomcat_version --quiet)" ]; then
-	if (systemctl is-enabled $tomcat_version --quiet); then
-		tomcat_enabled=1
-	fi
-	if (systemctl is-active $tomcat_version --quiet); then
-		tomcat_active=1
-	fi
-fi
-
-if [ $tomcat_enabled ]; then
+if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
 	systemctl disable $tomcat_version --quiet
 fi
-if [ $tomcat_active ]; then
+if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
 	systemctl stop $tomcat_version --quiet
 fi
 
