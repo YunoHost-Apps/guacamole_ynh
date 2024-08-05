@@ -22,9 +22,12 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
-	ynh_setup_source --source_id="${tomcat_version}_deb" --dest_dir="$install_dir/downloads/$tomcat_version"
+    mkdir -p $install_dir/downloads/$tomcat_version
 	pushd "$install_dir/downloads/$tomcat_version"
-		ar x "$tomcat_version.deb" "data.tar.xz"
+        apt-get download $tomcat_version
+        # Gotta use eval such that the wildcard works zbgmpf
+        eval "mv tomcat*.deb tomcat.deb"
+		ar x "tomcat.deb" "data.tar.xz"
 		tar xJf data.tar.xz
 	popd
 	mkdir -p "$install_dir/etc"
