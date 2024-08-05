@@ -4,14 +4,9 @@
 # COMMON VARIABLES
 #=================================================
 
-guacamole_version="1.5.5"
-
-
-debian_maj_version=$(sed 's/\..*//' /etc/debian_version)
-
-if [ "$debian_maj_version" -eq 11 ] ; then
+if [ "$YNH_DEBIAN_VERSION" == "bullseye" ] ; then
     tomcat_version="tomcat9"
-elif [ "$debian_maj_version" -eq 12 ] ; then
+elif [ "$YNH_DEBIAN_VERSION" == "bookworm" ] ; then
     tomcat_version="tomcat10"
 fi
 
@@ -23,15 +18,15 @@ function setup_sources {
 	ynh_setup_source --source_id="server" --dest_dir="$install_dir/.guacd-src"
 
 	tomcat_guac_dir="$path"
-	if [ "$path" == "/" -o -z "$path" ]; then
+	if [ "$path" == "/" ]; then
 		tomcat_guac_dir="ROOT"
 	fi
 
 	ynh_setup_source --source_id="${tomcat_version}_deb" --dest_dir="$install_dir/downloads/$tomcat_version"
-	pushd "$install_dir/downloads/$tomcat_version" || ynh_die
+	pushd "$install_dir/downloads/$tomcat_version"
 		ar x "$tomcat_version.deb" "data.tar.xz"
 		tar xJf data.tar.xz
-	popd || ynh_die
+	popd
 	mkdir -p "$install_dir/etc"
 	cp -r "$install_dir/downloads/$tomcat_version/usr/share/$tomcat_version/etc" -T "$install_dir/etc/$tomcat_version/"
 	cp -r "$install_dir/downloads/$tomcat_version/etc/$tomcat_version/" -T "$install_dir/etc/$tomcat_version/"
@@ -42,6 +37,7 @@ function setup_sources {
 
 	mkdir -p "$install_dir/etc/guacamole/extensions"
 
+    guacamole_version="$(ynh_app_upstream_version)"
 	ynh_setup_source --source_id="auth-ldap" --dest_dir="$install_dir/downloads/auth-ldap"
 	mv "$install_dir/downloads/auth-ldap/guacamole-auth-ldap-$guacamole_version.jar" "$install_dir/etc/guacamole/extensions/guacamole-auth-ldap.jar"
 
@@ -72,11 +68,3 @@ function _set_permissions() {
 	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
 	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
 }
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
