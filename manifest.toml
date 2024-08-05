@@ -42,8 +42,6 @@ ram.runtime = "50M"
     type = "user"
 
     [install.init_main_permission]
-    help.en = "Not recommended"
-    help.fr = "Pas reccomandé"
     type = "group"
     default = "all_users"
 
