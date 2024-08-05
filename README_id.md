@@ -18,7 +18,7 @@ Ini TIDAK boleh diedit dengan tangan.
 
 Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH
 
-**Versi terkirim:** 1.5.4~ynh2
+**Versi terkirim:** 1.5.5~ynh1
 
 ## Tangkapan Layar
 
@@ -28,7 +28,7 @@ Guacamole is a clientless remote desktop gateway. It supports standard protocols
 
 - Website aplikasi resmi: <https://guacamole.apache.org/>
 - Dokumentasi admin resmi: <https://guacamole.apache.org/doc/gug/>
-- Repositori kode aplikasi hulu: <https://github.com/apache/guacamole-server>
+- Depot kode aplikasi hulu: <https://github.com/apache/guacamole-server>
 - Gudang YunoHost: <https://apps.yunohost.org/app/guacamole>
 - Laporkan bug: <https://github.com/YunoHost-Apps/guacamole_ynh/issues>
 
