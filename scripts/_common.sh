@@ -4,11 +4,7 @@
 # COMMON VARIABLES
 #=================================================
 
-if [ "$YNH_DEBIAN_VERSION" == "bullseye" ] ; then
-    tomcat_version="tomcat9"
-elif [ "$YNH_DEBIAN_VERSION" == "bookworm" ] ; then
-    tomcat_version="tomcat10"
-fi
+guacamole_version="1.5.5"
 
 #=================================================
 # PERSONAL HELPERS
