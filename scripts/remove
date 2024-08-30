@@ -1,52 +1,44 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # REMOVE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
+ynh_script_progression "Removing system configurations related to $app..."
 
-if ynh_exec_warn_less yunohost service status $app-guacd >/dev/null; then
+if ynh_hide_warnings yunohost service status $app-guacd >/dev/null; then
 	yunohost service remove "$app-guacd"
 fi
-if ynh_exec_warn_less yunohost service status $app-tomcat >/dev/null; then
+if ynh_hide_warnings yunohost service status $app-tomcat >/dev/null; then
 	yunohost service remove "$app-tomcat"
 fi
 
 # Remove the dedicated systemd config
-ynh_remove_systemd_config --service="$app-guacd"
-ynh_remove_systemd_config --service="$app-tomcat"
+ynh_config_remove_systemd"$app-guacd"
+ynh_config_remove_systemd"$app-tomcat"
 
 # Remove the dedicated NGINX config
-ynh_remove_nginx_config
+ynh_config_remove_nginx
 
 # Remove the app-specific logrotate config
-ynh_remove_logrotate
+ynh_config_remove_logrotate
 
 # Remove the dedicated Fail2Ban config
-ynh_remove_fail2ban_config
+ynh_config_remove_fail2ban
 
 #=================================================
 # REMOVE VARIOUS FILES
 #=================================================
 
 # Remove the log files
-ynh_secure_remove --file="/var/log/$app"
+#REMOVEME? (Apps should not remove their log dir during remove ... this should only happen if --purge is used, and be handled by the core...) ynh_safe_rm "/var/log/$app"
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # REMOVE DEDICATED USERS
 #=================================================
-ynh_script_progression --message="Removing the dedicated system users..." --weight=1
+ynh_script_progression "Removing the dedicated system users..."
 
 # Delete a system user
 ynh_system_user_delete --username="$app-guacd"
@@ -56,4 +48,4 @@ ynh_system_user_delete --username="$app-tomcat"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed" --last
+ynh_script_progression "Removal of $app completed"

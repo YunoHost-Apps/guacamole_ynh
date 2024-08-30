@@ -1,14 +1,10 @@
 #!/bin/bash
 
 #=================================================
-# COMMON VARIABLES
+# COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
 guacamole_version="1.5.4"
-
-#=================================================
-# PERSONAL HELPERS
-#=================================================
 
 function setup_sources {
 	ynh_setup_source --source_id="server" --dest_dir="$install_dir/.guacd-src"
@@ -45,13 +41,13 @@ function setup_sources {
 
 	ynh_setup_source --source_id="mariadb-java-client" --dest_dir="$install_dir/etc/guacamole/lib/"
 
-	ynh_secure_remove --file="$install_dir/downloads/"
+	ynh_safe_rm "$install_dir/downloads/"
 }
 
 function _set_permissions() {
 	# Set permissions  to app files
-	chown -R "$app:$app" "$install_dir"
-	chmod -R g+rwX,o-rwx "$install_dir"
+	#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:$app" "$install_dir"
+	#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R g+rwX,o-rwx "$install_dir"
 	setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
 	setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
 
@@ -60,14 +56,6 @@ function _set_permissions() {
 	setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
 		"$install_dir/var/lib/tomcat9/" "$install_dir/etc/guacamole/" "$install_dir/etc/tomcat9/"
 
-	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
-	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
+	#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+	#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
 }
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
