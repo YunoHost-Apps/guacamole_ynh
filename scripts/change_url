@@ -1,30 +1,22 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping systemd services..." --weight=1
+ynh_script_progression "Stopping systemd services..."
 
-ynh_systemd_action --service_name="$app-guacd" --action="stop" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-guacd" --action="stop" --log_path="/var/log/$app/guacd.log"
+ynh_systemctl --service="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
+ynh_script_progression "Updating NGINX web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
 #=================================================
 # SPECIFIC MODIFICATIONS
@@ -33,7 +25,7 @@ ynh_change_url_nginx_config
 #=================================================
 
 if [ $change_path -eq 1 ]; then
-	ynh_script_progression --message="Moving Tomcat webbapp folder..." --weight=1
+	ynh_script_progression "Moving Tomcat webbapp folder..."
 
 	old_path_tomcat="$old_path"
 	if [ "$old_path_tomcat" == "/" -o -z "$old_path_tomcat" ]; then
@@ -48,17 +40,15 @@ if [ $change_path -eq 1 ]; then
 fi
 
 #=================================================
-# GENERIC FINALISATION
-#=================================================
 # START SYSTEMD SERVICES
 #=================================================
-ynh_script_progression --message="Starting systemd services..." --weight=1
+ynh_script_progression "Starting systemd services..."
 
-ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"

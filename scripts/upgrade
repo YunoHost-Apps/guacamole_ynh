@@ -1,34 +1,20 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CHECK VERSION
-#=================================================
-
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICES
 #=================================================
-ynh_script_progression --message="Stopping systemd services..." --weight=1
+ynh_script_progression "Stopping systemd services..."
 
-ynh_systemd_action --service_name="$app-guacd" --action="stop" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-guacd" --action="stop" --log_path="/var/log/$app/guacd.log"
+ynh_systemctl --service="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
 
 #=================================================
 # CREATE DEDICATED USERS
 #=================================================
-#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+#REMOVEME? ynh_script_progression "Making sure dedicated system user exists..."
 
 # Create dedicated users (if not existing)
 ynh_system_user_create --username="$app-guacd"
@@ -38,9 +24,10 @@ ynh_system_user_create --username="$app-tomcat"
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
+# FIXME: this is still supported but the recommendation is now to *always* re-setup the app sources wether or not the upstream sources changed
+if ynh_app_upstream_version_changed
 then
-	ynh_script_progression --message="Upgrading source files..." --weight=1
+	ynh_script_progression "Upgrading source files..."
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	setup_sources
@@ -49,15 +36,15 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
+ynh_script_progression "Upgrading NGINX web server configuration..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
+ynh_script_progression "Upgrading dependencies..."
 
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
@@ -82,16 +69,14 @@ if [ ! $tomcat_active ]; then
 fi
 
 #=================================================
-# SPECIFIC UPGRADE
-#=================================================
 # COMPILE GUACD
 #=================================================
-ynh_script_progression --message="Compiling guacd..." --weight=30
+ynh_script_progression "Compiling guacd..."
 
 pushd "$install_dir/.guacd-src"
 	LDFLAGS="-lrt" ./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --datadir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
-	ynh_exec_warn_less env LDFLAGS="-lrt" make
-	ynh_exec_warn_less env LDFLAGS="-lrt" make install
+	ynh_hide_warnings env LDFLAGS="-lrt" make
+	ynh_hide_warnings env LDFLAGS="-lrt" make install
 popd
 
 #=================================================
@@ -113,21 +98,19 @@ mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 # UPDATE CONFIG FILES
 #=================================================
 
-ynh_add_config --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
+ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
 
-ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$install_dir/etc/tomcat9/server.xml"
+ynh_replace --match="8080" --replace="$port" --file="$install_dir/etc/tomcat9/server.xml"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
+ynh_script_progression "Upgrading systemd configuration..."
 
 # Create dedicated systemd configs
-ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
-ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
+ynh_config_add_systemd --service="$app-guacd" --template="guacd.service"
+ynh_config_add_systemd --service="$app-tomcat" --template="tomcat.service"
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
@@ -137,15 +120,15 @@ _set_permissions
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
+ynh_script_progression "Upgrading logrotate configuration..."
 
 # Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/tomcat/catalina.out" --non-append --specific_user="$app-tomcat/$app-tomcat"
+ynh_config_add_logrotate "/var/log/$app/tomcat/catalina.out"
 
 #=================================================
 # INTEGRATE SERVICES IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating services in YunoHost..." --weight=1
+ynh_script_progression "Integrating services in YunoHost..."
 
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
 yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
@@ -153,21 +136,21 @@ yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/
 #=================================================
 # START SYSTEMD SERVICES
 #=================================================
-ynh_script_progression --message="Starting systemd services..." --weight=1
+ynh_script_progression "Starting systemd services..."
 
-ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
 
 #=================================================
 # UPGRADE FAIL2BAN
 #=================================================
-ynh_script_progression --message="Reconfiguring Fail2Ban..." --weight=1
+ynh_script_progression "Reconfiguring Fail2Ban..."
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
+ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
