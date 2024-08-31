@@ -11,23 +11,11 @@ ynh_script_progression "Stopping system tomcat..."
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
 # So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
-
-tomcat_enabled=""
-tomcat_active=""
-if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-	if (systemctl is-enabled tomcat9 --quiet); then
-		tomcat_enabled=1
-	fi
-	if (systemctl is-active tomcat9 --quiet); then
-		tomcat_active=1
-	fi
+if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
+	systemctl disable $tomcat_version --quiet
 fi
-
-if [ $tomcat_enabled ]; then
-	systemctl disable tomcat9 --quiet
-fi
-if [ $tomcat_active ]; then
-	systemctl stop tomcat9 --quiet
+if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
+	systemctl stop $tomcat_version --quiet
 fi
 
 #=================================================
@@ -35,7 +23,6 @@ fi
 #=================================================
 ynh_script_progression "Configuring system users..."
 
-# Create system users
 ynh_system_user_create --username="$app-guacd" --groups="$app"
 ynh_system_user_create --username="$app-tomcat" --groups="$app"
 
@@ -44,14 +31,13 @@ ynh_system_user_create --username="$app-tomcat" --groups="$app"
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 setup_sources
 
 mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
 mkdir -p "$install_dir/etc/"
-ln -s -f "$install_dir/etc/tomcat9" "$install_dir/var/lib/tomcat9/conf"
-ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/tomcat9/logs"
-ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
+ln -s -f "$install_dir/etc/$tomcat_version" "$install_dir/var/lib/$tomcat_version/conf"
+ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/var/lib/$tomcat_version/work"
 
 #=================================================
 # ADD CONFIGURATIONS
@@ -92,20 +78,16 @@ ynh_safe_rm "$install_dir/etc/guacamole/extensions/mysql-schema"
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create dedicated systemd configs
 ynh_config_add_systemd --service="$app-guacd" --template="guacd.service"
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
 
 ynh_config_add_systemd --service="$app-tomcat" --template="tomcat.service"
 yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
 
-# Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate "/var/log/$app/tomcat/catalina.out"
 
-# Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
 
 #=================================================
@@ -113,7 +95,6 @@ ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.Au
 #=================================================
 ynh_script_progression "Starting $app's systemd services..."
 
-# Start systemd services
 ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
 ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
 

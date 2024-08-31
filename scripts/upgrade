@@ -14,31 +14,22 @@ ynh_systemctl --service="$app-tomcat" --action="stop" --log_path="/var/log/$app/
 #=================================================
 # CREATE DEDICATED USERS
 #=================================================
-#REMOVEME? ynh_script_progression "Making sure dedicated system user exists..."
 
-# Create dedicated users (if not existing)
 ynh_system_user_create --username="$app-guacd"
 ynh_system_user_create --username="$app-tomcat"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression "Upgrading source files..."
 
-# FIXME: this is still supported but the recommendation is now to *always* re-setup the app sources wether or not the upstream sources changed
-if ynh_app_upstream_version_changed
-then
-	ynh_script_progression "Upgrading source files..."
-
-	# Download, check integrity, uncompress and patch the source from app.src
-	setup_sources
-fi
+setup_sources
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression "Upgrading NGINX web server configuration..."
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
 #=================================================
@@ -49,23 +40,11 @@ ynh_script_progression "Upgrading dependencies..."
 # Guacamole depends on Apache Tomcat.
 # But installing Tomcat from the Debian repos automatically enables and starts it.
 # So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
-
-tomcat_enabled=""
-tomcat_active=""
-if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-	if (systemctl is-enabled tomcat9 --quiet); then
-		tomcat_enabled=1
-	fi
-	if (systemctl is-active tomcat9 --quiet); then
-		tomcat_active=1
-	fi
+if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
+	systemctl disable $tomcat_version --quiet
 fi
-
-if [ ! $tomcat_enabled ]; then
-	systemctl disable tomcat9 --quiet
-fi
-if [ ! $tomcat_active ]; then
-	systemctl stop tomcat9 --quiet
+if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
+	systemctl stop $tomcat_version --quiet
 fi
 
 #=================================================
@@ -84,9 +63,9 @@ popd
 #=================================================
 
 mkdir -p "$install_dir/etc/"
-ln -s -f "$install_dir/etc/tomcat9" "$install_dir/var/lib/tomcat9/conf"
-ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/tomcat9/logs"
-ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
+ln -s -f "$install_dir/etc/$tomcat_version" "$install_dir/var/lib/$tomcat_version/conf"
+ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/var/lib/$tomcat_version/work"
 
 #=================================================
 # CREATE LOG DIRS
@@ -107,7 +86,6 @@ ynh_replace --match="8080" --replace="$port" --file="$install_dir/etc/tomcat9/se
 #=================================================
 ynh_script_progression "Upgrading systemd configuration..."
 
-# Create dedicated systemd configs
 ynh_config_add_systemd --service="$app-guacd" --template="guacd.service"
 ynh_config_add_systemd --service="$app-tomcat" --template="tomcat.service"
 

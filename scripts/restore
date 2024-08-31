@@ -9,22 +9,11 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Stopping system tomcat..."
 
-tomcat_enabled=""
-tomcat_active=""
-if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-	if (systemctl is-enabled tomcat9 --quiet); then
-		tomcat_enabled=1
-	fi
-	if (systemctl is-active tomcat9 --quiet); then
-		tomcat_active=1
-	fi
+if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
+	systemctl disable $tomcat_version --quiet
 fi
-
-if [ ! $tomcat_enabled ]; then
-	systemctl disable tomcat9 --quiet
-fi
-if [ ! $tomcat_active ]; then
-	systemctl stop tomcat9 --quiet
+if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
+	systemctl stop $tomcat_version --quiet
 fi
 
 #=================================================
