@@ -30,6 +30,12 @@ ynh_script_progression "Configuring system users..."
 ynh_system_user_create --username="$app-guacd" --groups="$app" --home_dir="/home/$app-guacd"
 ynh_system_user_create --username="$app-tomcat" --groups="$app"
 
+# Hack because useradd is called without --create-home by helper
+if [ ! -e "/home/$app-guacd" ]; then 
+	mkdir -p "/home/$app-guacd"
+	chown -R $app-guacd "/home/$app-guacd"
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCES
 #=================================================

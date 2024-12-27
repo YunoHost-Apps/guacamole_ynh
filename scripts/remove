@@ -43,6 +43,9 @@ ynh_script_progression "Removing the dedicated system users..."
 ynh_system_user_delete --username="$app-guacd"
 ynh_system_user_delete --username="$app-tomcat"
 
+# Because ynh_system_user_delete does not remove home directory
+ynh_secure_remove --file="/home/$app-guacd"
+
 #=================================================
 # END OF SCRIPT
 #=================================================
