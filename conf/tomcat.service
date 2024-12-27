@@ -1,22 +1,22 @@
 [Unit]
 Description=Apache Tomcat 9 Web Application Server
 After=network.target
-RequiresMountsFor=/var/log/__APP__/tomcat __INSTALL_DIR__/var/lib/__TOMCAT_VERSION__
+RequiresMountsFor=/var/log/__APP__/__TOMCAT_VERSION__
 
 [Service]
 
 # Configuration
-Environment="CATALINA_HOME=/usr/share/__TOMCAT_VERSION__"
-Environment="CATALINA_BASE=__INSTALL_DIR__/var/lib/__TOMCAT_VERSION__"
+Environment="CATALINA_HOME=__INSTALL_DIR__/__TOMCAT_VERSION__"
+Environment="CATALINA_BASE=__INSTALL_DIR__/__TOMCAT_VERSION__"
 Environment="CATALINA_TMPDIR=/tmp"
+Environment="CATALINA_OUT=/var/log/__APP__/__TOMCAT_VERSION__/catalina.out"
 Environment="JAVA_OPTS=-Djava.awt.headless=true"
 Environment="GUACAMOLE_HOME=__INSTALL_DIR__/etc/guacamole"
 
 
 # Lifecycle
-Type=simple
-ExecStartPre=+/usr/libexec/__TOMCAT_VERSION__/tomcat-update-policy.sh
-ExecStart=/bin/sh /usr/libexec/__TOMCAT_VERSION__/tomcat-start.sh > /var/log/__APP__/tomcat/tomcat.log 2>&1
+Type=forking
+ExecStart=/bin/sh __INSTALL_DIR__/__TOMCAT_VERSION__/bin/startup.sh > /var/log/__APP__/__TOMCAT_VERSION__/tomcat.log 2>&1
 SuccessExitStatus=143
 Restart=on-abort
 
@@ -32,9 +32,8 @@ NoNewPrivileges=true
 CacheDirectory=__APP__-__TOMCAT_VERSION__
 CacheDirectoryMode=750
 ProtectSystem=strict
-ReadWritePaths=__INSTALL_DIR__/etc/__TOMCAT_VERSION__/Catalina/
-ReadWritePaths=__INSTALL_DIR__/var/lib/__TOMCAT_VERSION__/webapps/
-ReadWritePaths=/var/log/__APP__/tomcat/
+ReadWritePaths=__INSTALL_DIR__/__TOMCAT_VERSION__/
+ReadWritePaths=/var/log/__APP__/__TOMCAT_VERSION__/
 
 [Install]
 WantedBy=multi-user.target

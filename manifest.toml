@@ -7,7 +7,7 @@ name = "Guacamole"
 description.en = "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH"
 description.fr = "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH"
 
-version = "1.5.5~ynh1"
+version = "1.5.5~ynh3"
 
 maintainers = ["Jules Bertholet"]
 
@@ -27,7 +27,7 @@ ldap = true
 
 sso = false
 
-disk = "50M"
+disk = "200M"
 ram.build = "50M"
 ram.runtime = "50M"
 
@@ -48,6 +48,11 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources]
+
+    [resources.sources.tomcat9]
+    url = "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.98/bin/apache-tomcat-9.0.98.tar.gz"
+    sha256 = "1d9a1104c2e235a5baff6e9ca8e28be3d864803fafc478f5c13c2ae6a5ed3d6f"
+
     [resources.sources.server]
     url = "https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz"
     sha256 = "67499611c2e22d9c933763adc5408e716a4bfd08a3eb8a5ba2fc6f8f70868f6b"
@@ -72,14 +77,15 @@ ram.runtime = "50M"
     sha256 = "80cca0a02076babad0dc7c76b60daa896f3d9bf10be82708f425fd42ce411393"
 
     [resources.sources.mariadb-java-client]
-    url = "https://downloads.mariadb.com/Connectors/java/connector-java-2.7.4/mariadb-java-client-2.7.4.jar"
-    sha256 = "f06577b19e89b33028b96cd4f031248e761de7ebc712f4ef535e268df76edb2a"
+    url = "https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar"
+    sha256 = "ccf16f38a7bc5bd55e59aa5e3590d74faebb2fb92d111ed5641d5175c4a3624a"
     format = "whatever"
     extract = false
     rename = "mariadb-java-client.jar"
 
     [resources.ports]
-    main.default = 8080
+    # change to not conflit with tomcat10 from debain repo if any
+    main.default = 8088
     guacd.default = 4822
 
     [resources.system_user]
@@ -113,7 +119,7 @@ ram.runtime = "50M"
         "libssl-dev",
         "libvorbis-dev",
         "libwebp-dev",
-        "tomcat9\\|tomcat10",
+	"default-jre",
     ]
 
     [resources.database]

@@ -3,12 +3,7 @@
 #=================================================
 # COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
-
-if [ "$YNH_DEBIAN_VERSION" == "bullseye" ] ; then
-    tomcat_version="tomcat9"
-elif [ "$YNH_DEBIAN_VERSION" == "bookworm" ] ; then
-    tomcat_version="tomcat10"
-fi
+tomcat_version="tomcat9"
 
 #=================================================
 # PERSONAL HELPERS
@@ -22,21 +17,10 @@ function setup_sources {
 		tomcat_guac_dir="ROOT"
 	fi
 
-    mkdir -p $install_dir/downloads/$tomcat_version
-	pushd "$install_dir/downloads/$tomcat_version"
-        apt-get download $tomcat_version
-        # Gotta use eval such that the wildcard works zbgmpf
-        eval "mv tomcat*.deb tomcat.deb"
-		ar x "tomcat.deb" "data.tar.xz"
-		tar xJf data.tar.xz
-	popd
-	mkdir -p "$install_dir/etc"
-	cp -r "$install_dir/downloads/$tomcat_version/usr/share/$tomcat_version/etc" -T "$install_dir/etc/$tomcat_version/"
-	cp -r "$install_dir/downloads/$tomcat_version/etc/$tomcat_version/" -T "$install_dir/etc/$tomcat_version/"
+	ynh_setup_source --source_id="$tomcat_version" --dest_dir="$install_dir/$tomcat_version"
 
 	ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
-	mkdir -p "$install_dir/var/lib/$tomcat_version/webapps"
-	mv "$install_dir/downloads/guacamole.war" "$install_dir/var/lib/$tomcat_version/webapps/$tomcat_guac_dir.war"
+	mv "$install_dir/downloads/guacamole.war" "$install_dir/$tomcat_version/webapps/$tomcat_guac_dir.war"
 
 	mkdir -p "$install_dir/etc/guacamole/extensions"
 
@@ -64,10 +48,11 @@ function _set_permissions() {
 	setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
 
 	# chown -R nobody:$app-tomcat "$install_dir/etc/$tomcat_version/" "$install_dir/etc/guacamole/"
-	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/var/lib/$tomcat_version/webapps"
+	chown -R "$app-tomcat":"$app-tomcat" "$install_dir/$tomcat_version/webapps"
 	setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
-		"$install_dir/var/lib/$tomcat_version/" "$install_dir/etc/guacamole/" "$install_dir/etc/$tomcat_version/"
+		"$install_dir/$tomcat_version/" "$install_dir/etc/guacamole/"
 
-	#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
-	#REMOVEME? Assuming ynh_config_add_logrotate is called, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/tomcat/"
+	chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+	chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/$tomcat_version/"
+	chmod -R g+rw "/var/log/$app"
 }
