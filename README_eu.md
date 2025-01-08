@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Guacamole YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/guacamole)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/guacamole)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/guacamole)
 
 [![Instalatu Guacamole YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 

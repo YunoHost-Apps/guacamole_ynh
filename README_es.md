@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Guacamole para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/guacamole)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
+![Estado funcional](https://apps.yunohost.org/badge/state/guacamole)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/guacamole)
 
 [![Instalar Guacamole con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
@@ -34,7 +36,7 @@ Guacamole is a clientless remote desktop gateway. It supports standard protocols
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/guacamole_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/guacamole_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 

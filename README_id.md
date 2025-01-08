@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Guacamole untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/guacamole)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
+![Status kerja](https://apps.yunohost.org/badge/state/guacamole)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/guacamole)
 
 [![Pasang Guacamole dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
@@ -28,7 +30,7 @@ Guacamole is a clientless remote desktop gateway. It supports standard protocols
 
 - Website aplikasi resmi: <https://guacamole.apache.org/>
 - Dokumentasi admin resmi: <https://guacamole.apache.org/doc/gug/>
-- Repositori kode aplikasi hulu: <https://github.com/apache/guacamole-server>
+- Depot kode aplikasi hulu: <https://github.com/apache/guacamole-server>
 - Gudang YunoHost: <https://apps.yunohost.org/app/guacamole>
 - Laporkan bug: <https://github.com/YunoHost-Apps/guacamole_ynh/issues>
 

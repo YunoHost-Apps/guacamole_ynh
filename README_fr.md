@@ -5,7 +5,9 @@ Il NE doit PAS être modifié à la main.
 
 # Guacamole pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/guacamole.svg)](https://ci-apps.yunohost.org/ci/apps/guacamole/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/guacamole.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/guacamole.maintain.svg)
+[![Niveau d’intégration](https://apps.yunohost.org/badge/integration/guacamole)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
+![Statut du fonctionnement](https://apps.yunohost.org/badge/state/guacamole)
+![Statut de maintenance](https://apps.yunohost.org/badge/maintained/guacamole)
 
 [![Installer Guacamole avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=guacamole)
 
