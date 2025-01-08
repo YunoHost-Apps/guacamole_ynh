@@ -4,81 +4,58 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-<<<<<<< HEAD
-ynh_script_progression "Stopping system tomcat..."
-
-# Guacamole depends on Apache Tomcat.
-# But installing Tomcat from the Debian repos automatically enables and starts it.
-# So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
-if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
-	systemctl disable $tomcat_version --quiet
-fi
-if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
-	systemctl stop $tomcat_version --quiet
-fi
-=======
->>>>>>> b5c3b53 (* Fix Bookworm compliancy by using a standalone tomcat9 instead of the tomcat10 provided by debian.)
-
-#=================================================
 # CREATE DEDICATED USERS
 #=================================================
 ynh_script_progression "Configuring system users..."
 
 # Create system users
-ynh_system_user_create --username="$app-guacd" --groups="$app" --home_dir="/home/$app-guacd"
-ynh_system_user_create --username="$app-tomcat" --groups="$app"
+ynh_system_user_create --username="$app-guacd" --groups="$app" --home_dir="$data_dir/$app-guacd"
+ynh_system_user_create --username="$app-tomcat" --groups="$app" --home_dir="$data_dir/$app-tomcat"
 
-# Hack because useradd is called without --create-home by helper
-if [ ! -e "/home/$app-guacd" ]; then 
-	mkdir -p "/home/$app-guacd"
-	chown -R $app-guacd "/home/$app-guacd"
-fi
+_create_home "$app-guacd" "$data_dir/$app-guacd"
+_create_home "$app-tomcat" "$data_dir/$app-tomcat"
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing Tomcat 9..."
+
+install_tomcat
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCES
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 setup_sources
-
-mkdir -p "/var/log/$app/$tomcat_version/" "/var/log/$app/guacd/"
-mkdir -p "$install_dir/etc/"
-ln -s -f "$install_dir/etc/$tomcat_version" "$install_dir/$tomcat_version/conf"
-rm -rf "$install_dir/$tomcat_version/logs"
-ln -s -f "/var/log/$app/$tomcat_version/" "$install_dir/$tomcat_version/logs"
-ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/$tomcat_version/work"
-
-#=================================================
-# ADD CONFIGURATIONS
-#=================================================
-
-ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
-
-<<<<<<< HEAD
-ynh_replace --match="8080" --replace="$port" --file="$install_dir/etc/$tomcat_version/server.xml"
-
-_set_permissions
-=======
-rm "$install_dir/$tomcat_version/conf/server.xml"
-ynh_add_config --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
-ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$install_dir/$tomcat_version/conf/server.xml"
->>>>>>> b5c3b53 (* Fix Bookworm compliancy by using a standalone tomcat9 instead of the tomcat10 provided by debian.)
 
 #=================================================
 # COMPILE GUACD
 #=================================================
-ynh_script_progression "Compiling guacd..."
+ynh_script_progression "Building guacd..."
 
-pushd "$install_dir/.guacd-src"
-	LDFLAGS="-lrt" ./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --datadir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
-	ynh_hide_warnings make -j $(nproc)
-	ynh_hide_warnings make install
-popd
+build_server
 
-_set_permissions
+# _set_permissions
+
+mkdir -p "$install_dir/server/etc/"
+ln -s -f "$install_dir/server/etc/$tomcat_version" "$install_dir/server/$tomcat_version/conf"
+rm -rf "$install_dir/server/$tomcat_version/logs"
+ln -s -f "/var/log/$app/$tomcat_version/" "$install_dir/server/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/server/$tomcat_version/work"
+
+#=================================================
+# APP INITIAL CONFIGURATION
+#=================================================
+ynh_script_progression "Adding $app's configuration files..."
+
+ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
+
+# ynh_replace --match="8080" --replace="$port" --file="$install_dir/server/etc/$tomcat_version/server.xml"
+ynh_safe_rm "$install_dir/$tomcat_version/conf/server.xml"
+ynh_add_config --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
+
+# _set_permissions
 
 #=================================================
 # FINISH SETTING UP DATABASE
@@ -105,26 +82,19 @@ ynh_config_add_nginx
 ynh_config_add_systemd --service="$app-guacd" --template="guacd.service"
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
 
-<<<<<<< HEAD
 ynh_config_add_systemd --service="$app-tomcat" --template="tomcat.service"
-yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
-
-# Use logrotate to manage application logfile(s)
-ynh_config_add_logrotate "/var/log/$app/tomcat/catalina.out"
-=======
-ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
 yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/$tomcat_version.log"
 
 # Use logrotate to manage application logfile(s)
-# ynh_use_logrotate and ynh_config_add_logrotate do NOT manage *.out extension
-#ynh_use_logrotate --logfile="/var/log/$app/$tomcat_version/catalina.out" --specific_user="$app-tomcat/$app-tomcat"
-ynh_add_config --template="guacamole-tomcat.logrotate" --destination="/etc/logrotate.d/$app-$tomcat_version"
->>>>>>> b5c3b53 (* Fix Bookworm compliancy by using a standalone tomcat9 instead of the tomcat10 provided by debian.)
+ynh_config_add_logrotate
+ynh_config_add_logrotate "/var/log/$app/$tomcat_version/catalina.out"
+# FIXME: chmod useful?
+chmod -R g+rw "/var/log/$app"
+chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/$tomcat_version/"
 
 # Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
-
-chmod -R g+rw "/var/log/$app"
 
 #=================================================
 # START SYSTEMD SERVICES
@@ -132,13 +102,8 @@ chmod -R g+rw "/var/log/$app"
 ynh_script_progression "Starting $app's systemd services..."
 
 # Start systemd services
-<<<<<<< HEAD
 ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
-=======
-ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
->>>>>>> b5c3b53 (* Fix Bookworm compliancy by using a standalone tomcat9 instead of the tomcat10 provided by debian.)
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
 
 #=================================================
 # END OF SCRIPT

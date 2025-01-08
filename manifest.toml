@@ -92,6 +92,8 @@ ram.runtime = "50M"
 
     [resources.install_dir]
 
+    [resources.data_dir]
+
     [resources.permissions]
     main.url = "/"
 
@@ -119,7 +121,7 @@ ram.runtime = "50M"
         "libssl-dev",
         "libvorbis-dev",
         "libwebp-dev",
-	"default-jre",
+        "default-jre",
     ]
 
     [resources.database]
