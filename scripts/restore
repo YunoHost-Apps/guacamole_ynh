@@ -5,16 +5,13 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# STOP TOMCAT
+# CREATE DEDICATED USERS
 #=================================================
-ynh_script_progression "Stopping system tomcat..."
+ynh_script_progression "Configuring system users..."
 
-if systemctl is-enabled $tomcat_version --quiet 2>/dev/null; then
-	systemctl disable $tomcat_version --quiet
-fi
-if systemctl is-active $tomcat_version --quiet 2>/dev/null; then
-	systemctl stop $tomcat_version --quiet
-fi
+# Create system users
+ynh_system_user_create --username="$app-guacd" --groups="$app" --home_dir="$data_dir/$app-guacd"
+ynh_system_user_create --username="$app-tomcat" --groups="$app" --home_dir="$data_dir/$app-tomcat"
 
 #=================================================
 # RESTORE THE APP MAIN DIR
@@ -22,15 +19,19 @@ fi
 ynh_script_progression "Restoring the app main directory..."
 
 ynh_restore "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:www-data" "$install_dir"
-#=================================================
-# RECREATE THE DEDICATED USER
-#=================================================
-ynh_script_progression "Recreating the dedicated system user..."
 
-# Create the dedicated user (if not existing)
-ynh_system_user_create --username="$app-guacd"
-ynh_system_user_create --username="$app-tomcat"
+chown -R "$app:$app" "$install_dir"
+
+#=================================================
+# RESTORE THE DATA DIRECTORY
+#=================================================
+ynh_script_progression "Restoring the data directory..."
+
+ynh_restore "$data_dir"
+
+chown -R "$app:$app" "$data_dir"
+chown "$app-guacd" "$data_dir/$app-guacd"
+chown "$app-tomcat" "$data_dir/$app-tomcat"
 
 #=================================================
 # RESTORE THE MYSQL DATABASE
@@ -55,27 +56,33 @@ ynh_script_progression "Restoring system configurations related to $app..."
 
 ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_restore "/etc/fail2ban/jail.d/$app.conf"
-ynh_restore "/etc/fail2ban/filter.d/$app.conf"
-ynh_systemctl --action=restart --service=fail2ban
-
 ynh_restore "/etc/systemd/system/$app-guacd.service"
 systemctl enable "$app-guacd.service" --quiet
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
 
 ynh_restore "/etc/systemd/system/$app-tomcat.service"
 systemctl enable "$app-tomcat.service" --quiet
-yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
+yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/$tomcat_version.log"
 
 ynh_restore "/etc/logrotate.d/$app"
 
+ynh_restore "/etc/fail2ban/jail.d/$app.conf"
+ynh_restore "/etc/fail2ban/filter.d/$app.conf"
+ynh_systemctl --action=restart --service=fail2ban
+
 #=================================================
-# START SYSTEMD SERVICES
+# RESTORE VARIOUS FILES
 #=================================================
-ynh_script_progression "Starting NGINX and $app's systemd services..."
+
+ynh_restore "/var/log/$app/"
+
+#=================================================
+# RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
+#=================================================
+ynh_script_progression "Reloading NGINX web server and $app's service..."
 
 ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
 
 ynh_systemctl --service=nginx --action=reload
 

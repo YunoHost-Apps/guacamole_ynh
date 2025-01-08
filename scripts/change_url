@@ -9,7 +9,7 @@ source /usr/share/yunohost/helpers
 ynh_script_progression "Stopping systemd services..."
 
 ynh_systemctl --service="$app-guacd" --action="stop" --log_path="/var/log/$app/guacd.log"
-ynh_systemctl --service="$app-tomcat" --action="stop" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-tomcat" --action="stop" --log_path="/var/log/$app/$tomcat_version.log"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -19,33 +19,25 @@ ynh_script_progression "Updating NGINX web server configuration..."
 ynh_config_change_url_nginx
 
 #=================================================
-# SPECIFIC MODIFICATIONS
-#=================================================
 # MOVE TOMCAT WEBAPP FOLDER
 #=================================================
 
 if [ $change_path -eq 1 ]; then
-	ynh_script_progression "Moving Tomcat webbapp folder..."
+    ynh_script_progression "Moving Tomcat webbapp folder..."
 
-	old_path_tomcat="$old_path"
-	if [ "$old_path_tomcat" == "/" -o -z "$old_path_tomcat" ]; then
-		old_path_tomcat="ROOT"
-	fi
-	new_path_tomcat="$new_path"
-	if [ "$new_path_tomcat" == "/" -o -z "$new_path_tomcat" ]; then
-		new_path_tomcat="ROOT"
-	fi
-
-	mv "$install_dir/var/lib/$tomcat_version/webapps/$old_path_tomcat" "$install_dir/var/lib/$tomcat_version/webapps/$new_path_tomcat"
+    old_path_tomcat="$(tomcat_path_for_path "$old_path")"
+    new_path_tomcat="$(tomcat_path_for_path "$new_path")"
+    mv "$install_dir/var/lib/$tomcat_version/webapps/$old_path_tomcat" \
+        "$install_dir/var/lib/$tomcat_version/webapps/$new_path_tomcat"
 fi
 
 #=================================================
 # START SYSTEMD SERVICES
 #=================================================
-ynh_script_progression "Starting systemd services..."
+ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
 
 #=================================================
 # END OF SCRIPT

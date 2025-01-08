@@ -19,12 +19,17 @@ _create_home() {
     fi
 }
 
-setup_sources() {
-    if [ "$path" == "/" ]; then
-        tomcat_guac_dir="ROOT"
+tomcat_path_for_path() {
+    the_path="$1"
+    if [ "$the_path" == "/" ]; then
+        echo "ROOT"
     else
-        tomcat_guac_dir="$path"
+        echo "$path"
     fi
+}
+
+setup_sources() {
+    tomcat_guac_dir="$(tomcat_path_for_path "$path")"
 
     ynh_setup_source --source_id="client" --dest_dir="$install_dir/downloads"
     mv "$install_dir/downloads/guacamole.war" "$install_dir/$tomcat_version/webapps/$tomcat_guac_dir.war"

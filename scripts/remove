@@ -8,43 +8,39 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Removing system configurations related to $app..."
 
-if ynh_hide_warnings yunohost service status $app-guacd >/dev/null; then
-	yunohost service remove "$app-guacd"
-fi
-if ynh_hide_warnings yunohost service status $app-tomcat >/dev/null; then
-	yunohost service remove "$app-tomcat"
-fi
-
-# Remove the dedicated systemd config
-ynh_config_remove_systemd"$app-guacd"
-ynh_config_remove_systemd"$app-tomcat"
-
-# Remove the dedicated NGINX config
-ynh_config_remove_nginx
-
-# Remove the app-specific logrotate config
-if [ -e "/etc/logrotate.d/$app-$tomcat_version" ]; then
-	rm "/etc/logrotate.d/$app-$tomcat_version"
-fi
-
-# Remove the dedicated Fail2Ban config
 ynh_config_remove_fail2ban
+
+ynh_config_remove_logrotate
+
+if ynh_hide_warnings yunohost service status "$app-guacd" >/dev/null; then
+    yunohost service remove "$app-guacd"
+fi
+ynh_config_remove_systemd "$app-guacd"
+
+if ynh_hide_warnings yunohost service status "$app-tomcat" >/dev/null; then
+    yunohost service remove "$app-tomcat"
+fi
+ynh_config_remove_systemd "$app-tomcat"
+
+ynh_config_remove_nginx
 
 #=================================================
 # REMOVE VARIOUS FILES
 #=================================================
+
+# Legacy cleanup
+if [ -e "/etc/logrotate.d/$app-$tomcat_version" ]; then
+    rm "/etc/logrotate.d/$app-$tomcat_version"
+fi
 
 #=================================================
 # REMOVE DEDICATED USERS
 #=================================================
 ynh_script_progression "Removing the dedicated system users..."
 
-# Delete a system user
+# Delete system users, homedirs will be deleted with data_dir
 ynh_system_user_delete --username="$app-guacd"
 ynh_system_user_delete --username="$app-tomcat"
-
-# Because ynh_system_user_delete does not remove home directory
-ynh_secure_remove --file="/home/$app-guacd"
 
 #=================================================
 # END OF SCRIPT
