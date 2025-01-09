@@ -53,7 +53,7 @@ ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc
 
 # ynh_replace --match="8080" --replace="$port" --file="$install_dir/server/etc/$tomcat_version/server.xml"
 ynh_safe_rm "$install_dir/$tomcat_version/conf/server.xml"
-ynh_add_config --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
+ynh_config_add --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
 
 # _set_permissions
 
