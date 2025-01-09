@@ -67,17 +67,15 @@ build_server() {
 }
 
 function _set_permissions() {
-    # Set permissions  to app files
-    #REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:$app" "$install_dir"
-    #REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R g+rwX,o-rwx "$install_dir"
-    setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
-    setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
+    # Set permissions to app files (Services are run as different users)
+    chown -R "$app:$app" "$install_dir"
+    chmod -R g+rwX,o-rwx "$install_dir"
+
+    # setfacl -n -R -m "user:$app-guacd:rx" -m "default:user:$app-guacd:rx" "$install_dir"
+    # setfacl -n -R -m "user:$app-tomcat:rx" -m "default:user:$app-tomcat:rx" "$install_dir"
 
     # chown -R nobody:$app-tomcat "$install_dir/etc/$tomcat_version/" "$install_dir/etc/guacamole/"
-    chown -R "$app-tomcat":"$app-tomcat" "$install_dir/$tomcat_version/webapps"
-    setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
-        "$install_dir/$tomcat_version/" "$install_dir/etc/guacamole/"
-
-
-
+    # chown -R "$app-tomcat:$app-tomcat" "$install_dir/$tomcat_version/webapps"
+    # setfacl -n -R -m "user:$app-guacd:-" -m "default:user:$app-guacd:-" \
+        # "$install_dir/$tomcat_version/" "$install_dir/etc/guacamole/"
 }
