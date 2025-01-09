@@ -39,10 +39,10 @@ build_server
 # _set_permissions
 
 mkdir -p "$install_dir/server/etc/"
-ln -s -f "$install_dir/server/etc/$tomcat_version" "$install_dir/server/$tomcat_version/conf"
-ynh_safe_rm "$install_dir/server/$tomcat_version/logs"
-ln -s -f "/var/log/$app/$tomcat_version/" "$install_dir/server/$tomcat_version/logs"
-ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/server/$tomcat_version/work"
+ln -s -f "$install_dir/server/etc/$tomcat_version" "$install_dir/$tomcat_version/conf"
+ynh_safe_rm "$install_dir/$tomcat_version/logs"
+ln -s -f "/var/log/$app/$tomcat_version/" "$install_dir/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/$tomcat_version/work"
 
 #=================================================
 # APP INITIAL CONFIGURATION
