@@ -1,27 +1,27 @@
 [Unit]
 Description=Apache Tomcat 9 Web Application Server
 After=network.target
-RequiresMountsFor=/var/log/__APP__/tomcat __INSTALL_DIR__/var/lib/tomcat9
+RequiresMountsFor=/var/log/__APP__/__TOMCAT_VERSION__
 
 [Service]
 
 # Configuration
-Environment="CATALINA_HOME=/usr/share/tomcat9"
-Environment="CATALINA_BASE=__INSTALL_DIR__/var/lib/tomcat9"
+Environment="CATALINA_HOME=__INSTALL_DIR__/__TOMCAT_VERSION__"
+Environment="CATALINA_BASE=__INSTALL_DIR__/__TOMCAT_VERSION__"
 Environment="CATALINA_TMPDIR=/tmp"
+Environment="CATALINA_OUT=/var/log/__APP__/__TOMCAT_VERSION__/catalina.out"
 Environment="JAVA_OPTS=-Djava.awt.headless=true"
 Environment="GUACAMOLE_HOME=__INSTALL_DIR__/etc/guacamole"
 
 
 # Lifecycle
-Type=simple
-ExecStartPre=+/usr/libexec/tomcat9/tomcat-update-policy.sh
-ExecStart=/bin/sh /usr/libexec/tomcat9/tomcat-start.sh > /var/log/__APP__/tomcat/tomcat.log 2>&1
+Type=forking
+ExecStart=/bin/sh __INSTALL_DIR__/__TOMCAT_VERSION__/bin/startup.sh > /var/log/__APP__/__TOMCAT_VERSION__/tomcat.log 2>&1
 SuccessExitStatus=143
 Restart=on-abort
 
 # Logging
-SyslogIdentifier=__APP__-tomcat9
+SyslogIdentifier=__APP__-__TOMCAT_VERSION__
 
 # Security
 User=__APP__-tomcat
@@ -29,12 +29,11 @@ Group=__APP__-tomcat
 PrivateTmp=yes
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-CacheDirectory=__APP__-tomcat9
+CacheDirectory=__APP__-__TOMCAT_VERSION__
 CacheDirectoryMode=750
 ProtectSystem=strict
-ReadWritePaths=__INSTALL_DIR__/etc/tomcat9/Catalina/
-ReadWritePaths=__INSTALL_DIR__/var/lib/tomcat9/webapps/
-ReadWritePaths=/var/log/__APP__/tomcat/
+ReadWritePaths=__INSTALL_DIR__/__TOMCAT_VERSION__/
+ReadWritePaths=/var/log/__APP__/__TOMCAT_VERSION__/
 
 [Install]
 WantedBy=multi-user.target

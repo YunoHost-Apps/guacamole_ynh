@@ -20,7 +20,7 @@
 
 Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH
 
-**分发版本：** 1.5.4~ynh2
+**分发版本：** 1.5.5~ynh3
 
 ## 截图
 

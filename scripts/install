@@ -1,130 +1,108 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Stopping system tomcat..." --weight=1
-
-# Guacamole depends on Apache Tomcat.
-# But installing Tomcat from the Debian repos automatically enables and starts it.
-# So we stop and disable it, unless Tomcat was already enabled or started by the user beforehand
-
-tomcat_enabled=""
-tomcat_active=""
-if [ "$(systemctl cat tomcat9 --quiet)" ]; then
-	if (systemctl is-enabled tomcat9 --quiet); then
-		tomcat_enabled=1
-	fi
-	if (systemctl is-active tomcat9 --quiet); then
-		tomcat_active=1
-	fi
-fi
-
-if [ $tomcat_enabled ]; then
-	systemctl disable tomcat9 --quiet
-fi
-if [ $tomcat_active ]; then
-	systemctl stop tomcat9 --quiet
-fi
-
-#=================================================
 # CREATE DEDICATED USERS
 #=================================================
-ynh_script_progression --message="Configuring system users..." --weight=1
+ynh_script_progression "Configuring system users..."
 
 # Create system users
-ynh_system_user_create --username="$app-guacd" --groups="$app"
-ynh_system_user_create --username="$app-tomcat" --groups="$app"
+ynh_system_user_create --username="$app-guacd" --groups="$app" --home_dir="$data_dir/$app-guacd"
+ynh_system_user_create --username="$app-tomcat" --groups="$app" --home_dir="$data_dir/$app-tomcat"
+
+_create_home "$app-guacd" "$data_dir/$app-guacd"
+_create_home "$app-tomcat" "$data_dir/$app-tomcat"
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing Tomcat 9..."
+
+install_tomcat
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCES
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=3
+ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 setup_sources
-
-mkdir -p "/var/log/$app/tomcat/" "/var/log/$app/guacd/" "/var/log/$app/tomcat/"
-mkdir -p "$install_dir/etc/"
-ln -s -f "$install_dir/etc/tomcat9" "$install_dir/var/lib/tomcat9/conf"
-ln -s -f "/var/log/$app/tomcat/" "$install_dir/var/lib/tomcat9/logs"
-ln -s -f "/var/cache/$app-tomcat9" "$install_dir/var/lib/tomcat9/work"
-
-#=================================================
-# ADD CONFIGURATIONS
-#=================================================
-
-ynh_add_config --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
-
-ynh_replace_string --match_string="8080" --replace_string="$port" --target_file="$install_dir/etc/tomcat9/server.xml"
-
-_set_permissions
 
 #=================================================
 # COMPILE GUACD
 #=================================================
-ynh_script_progression --message="Compiling guacd..." --weight=30
+ynh_script_progression "Building guacd..."
 
-pushd "$install_dir/.guacd-src"
-	LDFLAGS="-lrt" ./configure --enable-allow-freerdp-snapshots --prefix="$install_dir" --datadir="$install_dir" --with-freerdp-plugin-dir="$install_dir/lib/x86_64-linux-gnu/freerdp2"
-	ynh_exec_warn_less make -j $(nproc)
-	ynh_exec_warn_less make install
-popd
+build_server
+
+mkdir -p "$install_dir/server/etc/"
+ln -s -f "$install_dir/server/etc/$tomcat_version" "$install_dir/$tomcat_version/conf"
+ynh_safe_rm "$install_dir/$tomcat_version/logs"
+ln -s -f "/var/log/$app/$tomcat_version/" "$install_dir/$tomcat_version/logs"
+ln -s -f "/var/cache/$app-$tomcat_version" "$install_dir/$tomcat_version/work"
+
+#=================================================
+# APP INITIAL CONFIGURATION
+#=================================================
+ynh_script_progression "Adding $app's configuration files..."
+
+ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc/guacamole/guacamole.properties"
+
+# ynh_replace --match="8080" --replace="$port" --file="$install_dir/server/etc/$tomcat_version/server.xml"
+ynh_safe_rm "$install_dir/$tomcat_version/conf/server.xml"
+ynh_config_add --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
 
 #=================================================
 # FINISH SETTING UP DATABASE
 #=================================================
-ynh_script_progression --message="Setting up database files..." --weight=2
+ynh_script_progression "Setting up database files..."
 
-ynh_replace_string --match_string="guacadmin" --replace_string="$admin" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
-ynh_replace_string --match_string="CA458A7D494E3BE824F5E1E175A1556C0F8EEF2C2D7DF3633BEC4A29C4411960" --replace_string="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
-ynh_replace_string --match_string="FE24ADC5E11E2B25288D1704ABE67A79E342ECC26064CE69C5B3177795A82264" --replace_string="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
+ynh_replace --match="guacadmin" --replace="$admin" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
+ynh_replace --match="CA458A7D494E3BE824F5E1E175A1556C0F8EEF2C2D7DF3633BEC4A29C4411960" --replace="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
+ynh_replace --match="FE24ADC5E11E2B25288D1704ABE67A79E342ECC26064CE69C5B3177795A82264" --replace="$(hexdump -n 32 -e '4/4 "%08X"' /dev/urandom)" -f "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
 
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$install_dir/etc/guacamole/extensions/mysql-schema/001-create-schema.sql"
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" < "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
-ynh_secure_remove --file="$install_dir/etc/guacamole/extensions/mysql-schema"
+ynh_mysql_db_shell < "$install_dir/etc/guacamole/extensions/mysql-schema/001-create-schema.sql"
+ynh_mysql_db_shell < "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
+ynh_safe_rm "$install_dir/etc/guacamole/extensions/mysql-schema"
+
+_set_permissions
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create dedicated systemd configs
-ynh_add_systemd_config --service="$app-guacd" --template="guacd.service"
+ynh_config_add_systemd --service="$app-guacd" --template="guacd.service"
 yunohost service add "$app-guacd" --description="Guacamole server" --log="/var/log/$app/guacd.log"
 
-ynh_add_systemd_config --service="$app-tomcat" --template="tomcat.service"
-yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/tomcat.log"
+ynh_config_add_systemd --service="$app-tomcat" --template="tomcat.service"
+yunohost service add "$app-tomcat" --description="Guacamole client" --log="/var/log/$app/$tomcat_version.log"
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="/var/log/$app/tomcat/catalina.out" --specific_user="$app-tomcat/$app-tomcat"
+ynh_config_add_logrotate
+ynh_config_add_logrotate "/var/log/$app/$tomcat_version/"
+chmod -R g+rwX "/var/log/$app"
 
 # Create a dedicated Fail2Ban config
-ynh_add_fail2ban_config --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
+ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
+chmod -R g+rwX "/var/log/$app"
 
 #=================================================
 # START SYSTEMD SERVICES
 #=================================================
-ynh_script_progression --message="Starting $app's systemd services..." --weight=1
+ynh_script_progression "Starting $app's systemd services..."
 
 # Start systemd services
-ynh_systemd_action --service_name="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
-ynh_systemd_action --service_name="$app-tomcat" --action="start" --log_path="/var/log/$app/tomcat.log"
+ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
+ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"
