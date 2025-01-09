@@ -21,6 +21,7 @@ ynh_script_progression "Restoring the app main directory..."
 ynh_restore "$install_dir"
 
 chown -R "$app:$app" "$install_dir"
+_set_permissions
 
 #=================================================
 # RESTORE THE DATA DIRECTORY
@@ -39,15 +40,6 @@ chown "$app-tomcat" "$data_dir/$app-tomcat"
 ynh_script_progression "Restoring the MySQL database..."
 
 ynh_mysql_db_shell < ./db.sql
-
-#=================================================
-# RESTORE VARIOUS FILES
-#=================================================
-ynh_script_progression "Restoring various files..."
-
-ynh_restore "/var/log/$app"
-
-_set_permissions
 
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
@@ -73,8 +65,11 @@ ynh_systemctl --action=restart --service=fail2ban
 #=================================================
 # RESTORE VARIOUS FILES
 #=================================================
+ynh_script_progression "Restoring various files..."
 
-ynh_restore "/var/log/$app/"
+ynh_restore "/var/log/$app"
+chown -R "$app:$app" "/var/log/$app"
+chmod -R g+rwX "/var/log/$app"
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
