@@ -90,7 +90,7 @@ ynh_config_add_logrotate
 ynh_config_add_logrotate "/var/log/$app/$tomcat_version/catalina.out"
 # FIXME: chmod useful?
 chmod -R g+rw "/var/log/$app"
-chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
+# chown -R "$app-guacd:$app-guacd" "/var/log/$app/guacd/"
 chown -R "$app-tomcat:$app-tomcat" "/var/log/$app/$tomcat_version/"
 
 # Create a dedicated Fail2Ban config
