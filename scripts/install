@@ -90,6 +90,7 @@ chmod -R g+rwX "/var/log/$app"
 
 # Create a dedicated Fail2Ban config
 ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
+chmod -R g+rwX "/var/log/$app"
 
 #=================================================
 # START SYSTEMD SERVICES
