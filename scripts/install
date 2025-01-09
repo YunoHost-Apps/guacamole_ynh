@@ -53,8 +53,6 @@ ynh_config_add --template="guacamole.properties" --destination="$install_dir/etc
 ynh_safe_rm "$install_dir/$tomcat_version/conf/server.xml"
 ynh_config_add --template="server.xml" --destination="$install_dir/$tomcat_version/conf/server.xml"
 
-_set_permissions
-
 #=================================================
 # FINISH SETTING UP DATABASE
 #=================================================
@@ -67,6 +65,8 @@ ynh_replace --match="FE24ADC5E11E2B25288D1704ABE67A79E342ECC26064CE69C5B3177795A
 ynh_mysql_db_shell < "$install_dir/etc/guacamole/extensions/mysql-schema/001-create-schema.sql"
 ynh_mysql_db_shell < "$install_dir/etc/guacamole/extensions/mysql-schema/002-create-admin-user.sql"
 ynh_safe_rm "$install_dir/etc/guacamole/extensions/mysql-schema"
+
+_set_permissions
 
 #=================================================
 # SYSTEM CONFIGURATION
