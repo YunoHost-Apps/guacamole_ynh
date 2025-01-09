@@ -9,7 +9,7 @@ RequiresMountsFor=/var/log/__APP__/__TOMCAT_VERSION__
 Environment="CATALINA_HOME=__INSTALL_DIR__/__TOMCAT_VERSION__"
 Environment="CATALINA_BASE=__INSTALL_DIR__/__TOMCAT_VERSION__"
 Environment="CATALINA_TMPDIR=/tmp"
-Environment="CATALINA_OUT=/var/log/__APP__/__TOMCAT_VERSION__/catalina.out"
+Environment="CATALINA_OUT=/var/log/__APP__/__TOMCAT_VERSION__/catalina.log"
 Environment="JAVA_OPTS=-Djava.awt.headless=true"
 Environment="GUACAMOLE_HOME=__INSTALL_DIR__/etc/guacamole"
 
