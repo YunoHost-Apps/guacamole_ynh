@@ -4,8 +4,8 @@ packaging_format = 2
 
 id = "guacamole"
 name = "Guacamole"
-description.en = "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH"
-description.fr = "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH"
+description.en = "Remote access solution"
+description.fr = "Solution d'accès à distance"
 
 version = "1.5.5~ynh3"
 
