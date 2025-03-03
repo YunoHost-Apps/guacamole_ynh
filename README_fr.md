@@ -18,9 +18,10 @@ Il NE doit PAS être modifié à la main.
 
 ## Vue d’ensemble
 
-Guacamole is a clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH
+Guacamole est une passerelle de bureau à distance sans client. Il prend en charge les protocoles standard tels que VNC, RDP et SSH.
 
-**Version incluse :** 1.5.5~ynh3
+
+**Version incluse :** 1.5.5~ynh4
 
 ## Captures d’écran
 
