@@ -1,1 +1,1 @@
-The user that is configured as admin during install will have access to admin settings in the settings menu of the app (under the user menu). Configuration files are in `/opt/yunohost/guacamole/etc/guacamole` (for the first install).
+The user configured as admin during installation will have access to the admin settings in the application's settings menu (under the user menu). The configuration files are located in `/opt/yunohost/guacamole/etc/guacamole` (for the first installation).

@@ -1,5 +1,5 @@
 [Unit]
-Description=Guacamole Server
+Description=Guacamole: remote access solution
 After=network.target
 
 [Service]

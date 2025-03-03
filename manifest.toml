@@ -7,7 +7,7 @@ name = "Guacamole"
 description.en = "Remote access solution"
 description.fr = "Solution d'accès à distance"
 
-version = "1.5.5~ynh3"
+version = "1.5.5~ynh4"
 
 maintainers = ["Jules Bertholet"]
 
