@@ -23,12 +23,11 @@ ynh_config_change_url_nginx
 #=================================================
 
 if [ $change_path -eq 1 ]; then
-    ynh_script_progression "Moving Tomcat webbapp folder..."
+    ynh_script_progression "Moving Tomcat webapp folder..."
 
     old_path_tomcat="$(tomcat_path_for_path "$old_path")"
     new_path_tomcat="$(tomcat_path_for_path "$new_path")"
-    mv "$install_dir/$tomcat_version/webapps/$old_path_tomcat.war" \
-        "$install_dir/$tomcat_version/webapps/$new_path_tomcat.war"
+    mv "$install_dir/$tomcat_version/webapps/$old_path_tomcat.war" "$install_dir/$tomcat_version/webapps/$new_path_tomcat.war"
 fi
 
 #=================================================
