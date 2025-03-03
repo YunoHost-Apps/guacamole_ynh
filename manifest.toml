@@ -4,10 +4,10 @@ packaging_format = 2
 
 id = "guacamole"
 name = "Guacamole"
-description.en = "Clientless remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH"
-description.fr = "Service de bureau à distance sans client. Fonctionne avec des protocoles standard comme VNC, RDP, et SSH"
+description.en = "Remote access solution"
+description.fr = "Solution d'accès à distance"
 
-version = "1.5.5~ynh3"
+version = "1.5.5~ynh4"
 
 maintainers = ["Jules Bertholet"]
 
@@ -50,8 +50,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.tomcat9]
-    url = "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.98/bin/apache-tomcat-9.0.98.tar.gz"
-    sha256 = "1d9a1104c2e235a5baff6e9ca8e28be3d864803fafc478f5c13c2ae6a5ed3d6f"
+    url = "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.100/bin/apache-tomcat-9.0.100.tar.gz"
+    sha256 = "1253158c45a31a8168b41436512acc2292e94a3468b1bd8e4d0a7a79dcc1f5ff"
 
     [resources.sources.server]
     url = "https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz"

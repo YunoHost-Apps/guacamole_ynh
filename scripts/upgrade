@@ -25,7 +25,7 @@ _create_home "$app-tomcat" "$data_dir/$app-tomcat"
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression "Upgrading Tomcat 9..."
+ynh_script_progression "Upgrading Tomcat..."
 
 install_tomcat
 
