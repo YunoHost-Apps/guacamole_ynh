@@ -11,7 +11,7 @@ It shall NOT be edited by hand.
 Remote access solution
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://guacamole.apache.org/)
-[![Version: 1.5.5~ynh4](https://img.shields.io/badge/Version-1.5.5~ynh4-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
+[![Version: 1.6.0~ynh1](https://img.shields.io/badge/Version-1.6.0~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/guacamole/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/guacamole"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>

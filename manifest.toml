@@ -7,7 +7,7 @@ name = "Guacamole"
 description.en = "Remote access solution"
 description.fr = "Solution d'accès à distance"
 
-version = "1.5.5~ynh4"
+version = "1.6.0~ynh1"
 
 maintainers = ["Jules Bertholet"]
 
@@ -50,35 +50,35 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.tomcat9]
-    url = "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.100/bin/apache-tomcat-9.0.100.tar.gz"
-    sha256 = "1253158c45a31a8168b41436512acc2292e94a3468b1bd8e4d0a7a79dcc1f5ff"
+    url = "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.105/bin/apache-tomcat-9.0.105.tar.gz"
+    sha256 = "ee86ee179493e610358b23a0f79ba70b9e76ade71157aada9ac7cdcdcdbe35f5"
 
     [resources.sources.server]
-    url = "https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz"
-    sha256 = "67499611c2e22d9c933763adc5408e716a4bfd08a3eb8a5ba2fc6f8f70868f6b"
+    url = "https://downloads.apache.org/guacamole/1.6.0/source/guacamole-server-1.6.0.tar.gz"
+    sha256 = "8bc45675da96d7b6f39728160181e3d4ff3c08f460f6d26de5805b642bf13f2b"
 
     [resources.sources.client]
-    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war"
-    sha256 = "4267307f3600663723f24af92d596e99c8359425315135052a42d451f9529200"
+    url = "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-1.6.0.war"
+    sha256 = "b41ceb1e2df010b54db563e0b00edb8d5fe9f073c6168462e4c978df0fc6e716"
     format = "zip"
     extract = false
     rename = "guacamole.war"
 
     [resources.sources.auth-header]
-    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-header-1.5.5.tar.gz"
-    sha256 = "a39ca9563be6d31b4dc1251c76a62baeb2a9d4930b3055e342bb9ce80e526a78"
+    url = "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-auth-header-1.6.0.tar.gz"
+    sha256 = "54c6ea944aab5153bda20401fa28400128ad89606b57027bee2127327b65f958"
 
     [resources.sources.auth-ldap]
-    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-ldap-1.5.5.tar.gz"
-    sha256 = "01d3cd74da5de9da9cc73a788ab2938dd44f5cbe42ad90eebb4bee07f246dfa3"
+    url = "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-auth-ldap-1.6.0.tar.gz"
+    sha256 = "b07f27adc370324108527b6929f61d93880026d57c1033064bd1c55b881c7497"
 
     [resources.sources.auth-jdbc]
-    url = "https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz"
-    sha256 = "80cca0a02076babad0dc7c76b60daa896f3d9bf10be82708f425fd42ce411393"
+    url = "https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-auth-jdbc-1.6.0.tar.gz"
+    sha256 = "97bc5fd3d67d25c0e98a475d1dfd308a037859f549fac47171c723b7a7039366"
 
     [resources.sources.mariadb-java-client]
-    url = "https://dlm.mariadb.com/3752064/Connectors/java/connector-java-2.7.12/mariadb-java-client-2.7.12.jar"
-    sha256 = "ccf16f38a7bc5bd55e59aa5e3590d74faebb2fb92d111ed5641d5175c4a3624a"
+    url = "https://dlm.mariadb.com/4550298/Connectors/java/connector-java-2.7.13/mariadb-java-client-2.7.13.jar"
+    sha256 = "20f01b9bf7eb8abb87e6af32641dd0cfd2784cfe37a74720cb487960f911278f"
     format = "whatever"
     extract = false
     rename = "mariadb-java-client.jar"
@@ -111,7 +111,6 @@ ram.runtime = "50M"
         "libavformat-dev",
         "libavutil-dev",
         "libswscale-dev",
-        "freerdp2-dev",
         "libpango1.0-dev",
         "libssh2-1-dev",
         "libtelnet-dev",
@@ -123,6 +122,14 @@ ram.runtime = "50M"
         "libwebp-dev",
         "default-jre",
     ]
+
+packages_from_raw_bash = """
+    if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+        echo "freerdp2-dev";
+    elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+        echo "freerdp3-dev";
+    fi
+    """
 
     [resources.database]
     type = "mysql"
