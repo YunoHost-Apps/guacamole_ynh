@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=__APP__-guacd
 Group=__APP__-guacd
-ExecStart=__INSTALL_DIR__/server/sbin/guacd -f -l __PORT_GUACD__ >> /var/log/__APP__/guacd.log 2>&1
+ExecStart=__INSTALL_DIR__/server/sbin/guacd -b 127.0.0.1 -f -l __PORT_GUACD__ >> /var/log/__APP__/guacd.log 2>&1
 Restart=on-abnormal
 Environment="LD_LIBRARY_PATH=__INSTALL_DIR__/server/lib:__INSTALL_DIR__/server/usr/lib"
 Environment="GUACAMOLE_HOME=__INSTALL_DIR__/server/etc/guacamole"
