@@ -111,7 +111,6 @@ ram.runtime = "50M"
         "libavformat-dev",
         "libavutil-dev",
         "libswscale-dev",
-        "freerdp2-dev",
         "libpango1.0-dev",
         "libssh2-1-dev",
         "libtelnet-dev",
@@ -123,6 +122,14 @@ ram.runtime = "50M"
         "libwebp-dev",
         "default-jre",
     ]
+
+packages_from_raw_bash = """
+    if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+        echo "freerdp2-dev";
+    elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+        echo "freerdp3-dev";
+    fi
+    """
 
     [resources.database]
     type = "mysql"
