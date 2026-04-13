@@ -74,7 +74,7 @@ build_server() {
             --prefix="$install_dir/server" \
             --datadir="$install_dir/server" \
             --with-freerdp-plugin-dir="$install_dir/server/lib/x86_64-linux-gnu/freerdp3"
-        ynh_hide_warnings CPPFLAGS=-Wno-error=deprecated-declarations make -j "$(nproc)"
+        ynh_hide_warnings env CPPFLAGS=-Wno-error=deprecated-declarations make -j "$(nproc)"
         ynh_hide_warnings make install
         popd
     fi
