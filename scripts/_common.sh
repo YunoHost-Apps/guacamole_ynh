@@ -56,6 +56,7 @@ build_server() {
     ynh_safe_rm "$install_dir/server"
     ynh_setup_source --full_replace --source_id="server" --dest_dir="$install_dir/server_sources"
     pushd "$install_dir/server_sources"
+        GUACAMOLE_SERVER_OPTS="--disable-guaclog CPPFLAGS=-Wno-error=deprecated-declarations"
         LDFLAGS="-lrt" ./configure --enable-allow-freerdp-snapshots \
             --prefix="$install_dir/server" \
             --datadir="$install_dir/server" \
