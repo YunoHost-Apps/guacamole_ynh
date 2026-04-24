@@ -82,6 +82,9 @@ chmod -R g+rwX "/var/log/$app"
 ynh_config_add_fail2ban --logpath="/var/log/syslog" --failregex='o.a.g.r.auth.AuthenticationService - Authentication attempt from <HOST> for user "[^"]*" failed\.$'
 chmod -R g+rwX "/var/log/$app"
 
+# This has to be done somhow for install on root to work
+ynh_safe_rm "$install_dir/$tomcat_version/webapps/ROOT"
+
 #=================================================
 # START SYSTEMD SERVICES
 #=================================================
@@ -90,11 +93,6 @@ ynh_script_progression "Starting $app's systemd services..."
 # Start systemd services
 ynh_systemctl --service="$app-guacd" --action="start" --log_path="/var/log/$app/guacd.log"
 ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
-
-# This has to be done somhow for install on root to work
-ynh_safe_rm "$install_dir/$tomcat_version/ROOT"
-ynh_systemctl --service="$app-tomcat" --action="start" --log_path="/var/log/$app/$tomcat_version.log"
-
 
 #=================================================
 # END OF SCRIPT
